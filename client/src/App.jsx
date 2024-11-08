@@ -7,53 +7,20 @@ import HomePage from "./Pages/HomePage";
 import Login_Signup from "./Pages/Login_Signup";
 import ToDo from "./components/ToDo";
 import Header from "./components/Header";
+import axios from "axios";
 
 export default function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-
-  useEffect(() => {
-    const lenis = new Lenis({
-      smooth: true,
-    });
-
-    function onAnimationFrame(time) {
-      lenis.raf(time);
-      requestAnimationFrame(onAnimationFrame);
-    }
-
-    requestAnimationFrame(onAnimationFrame);
-
-    return () => lenis.destroy();
-  }, []);
-
-  useEffect(() => {
-    const handleStorageChange = () => setToken(localStorage.getItem("token"));
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
-  const ProtectedRoute = ({ element }) =>
-    token ? element : <Navigate to="/login" replace />;
-
-  const AuthRoute = ({ element }) =>
-    token ? <Navigate to="/todo" replace /> : element;
+ const token = localStorage.getItem("token");
+ const uid = localStorage.getItem("uid");
+ 
 
   return (
     <div>
       <div>
-        <BrowserRouter>
-          <Header setToken={setToken} />{" "}
-          {/* Pass setToken to Header for logout functionality */}
+        <BrowserRouter> 
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route
-              path="/login"
-              element={<AuthRoute element={<Login_Signup />} />}
-            />
-            <Route
-              path="/todo"
-              element={<ProtectedRoute element={<ToDo />} />}
-            />
+            <Route path="/" element={token ? <HomePage></HomePage> : <Navigate to="/auth" />} />
+            <Route path="/auth" element={<Login_Signup />} />
           </Routes>
         </BrowserRouter>
       </div>

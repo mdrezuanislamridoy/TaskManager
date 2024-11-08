@@ -1,12 +1,16 @@
 const mongoose = require("mongoose");
 require("dotenv");
 
-const MongoConnection = async () => {
-  const con = await mongoose.connect(process.env.DB_URL);
+const DB_URL = "mongodb+srv://mdrezuanislamridoy:RRRidoy781@rrcluster.dzwno.mongodb.net/TaskManager?retryWrites=true&w=majority"
 
-  if (con) {
-    console.log("DB connected");
-  }
+const database  = {} 
+database.connectDB = async () => {
+    console.log("hello db");
+   mongoose.connect(DB_URL).then(() => {
+        console.log("connected to db");
+    }).catch((err) => {
+        console.log(err);
+    });
 };
 
-module.exports = MongoConnection;
+module.exports = database;
