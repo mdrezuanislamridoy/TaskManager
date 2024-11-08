@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { SignOut } from "phosphor-react";
 
 function ToDo() {
     const [tasks, setTasks] = useState([]);
@@ -9,14 +10,26 @@ function ToDo() {
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState("");
 
+    const [user, setUser] = useState(null)
+
     useEffect(() => {
-        
+        const getCurrentUser = async () => {
+            let uid = localStorage.getItem("uid");
+            try {
+                const response = await axios.get(`http://localhost:3003/api/u/user/${uid}`);
+                setUser(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error("Failed to get user:", error);
+            }
+        }
+        getCurrentUser();
 
         const fetchTasks = async () => {
             try {
-                const response = await axios.get("http://localhost:3003/api/todos" , {
+                const response = await axios.get("http://localhost:3003/api/todos", {
                     headers: {
-                        uid : localStorage.getItem("uid")
+                        uid: localStorage.getItem("uid")
                     }
                 });
 
@@ -30,6 +43,18 @@ function ToDo() {
         fetchTasks();
     }, []);
 
+    const logOut = () => {
+        console.log("log out button clicked");
+        axios.post("http://localhost:3003/api/user/logout", {
+            headers: {
+                uid: localStorage.getItem("uid")
+            }
+        });
+        localStorage.removeItem("token");
+        localStorage.removeItem("uid");
+        window.location.reload();
+    };
+       
     const handleAddTask = async (e) => {
         e.preventDefault();
         if (!title || !description || !date) {
@@ -39,7 +64,7 @@ function ToDo() {
         try {
             const response = await axios.post(
                 "http://localhost:3003/api/todos",
-                { title, description, date, completed: false, userId: localStorage.getItem("uid") } 
+                { title, description, date, completed: false, userId: localStorage.getItem("uid") }
             );
             setTasks([...tasks, response.data]);
             setTitle("");
@@ -72,10 +97,15 @@ function ToDo() {
         }
     };
 
+     
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center p-5">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8">Task Manager</h1>
-
+             {user && (
+                 <div className="mb-4 text-xl text-center text-gray-500  flex w-full justify-between items-center">
+                   <p> Hi! {user.name}!</p>  
+                    <button onClick={()=>logOut()} className="p-3"> <SignOut> </SignOut>  </button>
+                </div>
+            )}
             {message && (
                 <p className="mb-4 text-sm text-center text-red-500 font-semibold">
                     {message}
@@ -152,8 +182,8 @@ function ToDo() {
                             <div>
                                 <h3
                                     className={`text-xl font-bold ${task.completed
-                                            ? "line-through text-gray-500"
-                                            : "text-gray-800"
+                                        ? "line-through text-gray-500"
+                                        : "text-gray-800"
                                         }`}
                                 >
                                     {task.title}

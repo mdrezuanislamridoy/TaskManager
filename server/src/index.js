@@ -7,6 +7,7 @@ const AuthRoute = require("./routes/AuthRoutes");
 const todoRoutes = require("./routes/todoRoutes");
 const database = require("./config/db");
 const { default: mongoose } = require("mongoose");
+const UserRouter = require("./routes/UserRoutes");
 
 app.use(cors()); 
 app.use(express.urlencoded({ extended: true }));
@@ -21,6 +22,7 @@ mongoose.connect("mongodb://localhost:27017").then((result) => {
 
 app.use("/api/user", AuthRoute);
 app.use("/api/todos", todoRoutes);
+app.use("/api/u", UserRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello");
