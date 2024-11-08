@@ -37,13 +37,40 @@ todoRoutes.put("/:id", async (req, res) => {
   try {
     const task = await TodoModel.findOneAndUpdate(
       { _id: req.params.id },
-      { completed: req.body.completed },
+      { completed: req.body.completed   },
       { new: true }
     );
 
 
-    if (!task) return res.status(404).json({ message: "Task not found" });
+    if (!task) return res.status(404).send({ message: "Task not found" });
 
+    res.send(task);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: error.message });
+  }
+});
+
+todoRoutes.put('/edit/:id', async (req, res) => {
+  try {
+    const task = await TodoModel.findOneAndUpdate(
+      { _id: req.params.id },
+      { title: req.body.title, description: req.body.description },
+      { new: true }
+    );
+    if (!task) return res.status(404).send({ message: "Task not found" });
+    res.send(task);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send({ message: error.message });
+  }
+});
+
+todoRoutes.delete("/:id", async (req, res) => {
+  try {
+    const task = await TodoModel.findOneAndDelete({ _id: req.params.id });
+    if (!task) return res.status(404).send({ message: "Task not found" });
     res.send(task);
   } catch (error) {
     console.log(error);
