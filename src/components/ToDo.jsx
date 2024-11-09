@@ -194,7 +194,7 @@ function ToDo() {
                 {
                     message && setTimeout(() => {
                         setMessage(null)
-                    }, 300)
+                    }, 3000)
                 }
             </div>
             {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-6 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-700 text-white px-4 py-3 rounded-md z-50 ">
