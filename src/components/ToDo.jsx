@@ -164,22 +164,31 @@ function ToDo() {
 
     return (
         <div className=" border shadow-2xl h-screen m-auto flex flex-col items-center relative md:w-[480px] md:aspect-[2/3] md:mt-12">
-            {user && (
-                <div className="sticky top-0 shadow-md  text-xl bg-white text-center text-gray-500 flex w-full justify-between items-center px-6 py-4 ">
-                    <p>Hi! {user.name}!</p>
-                    <div>
-                        <button className="p-3 hover:bg-gray-100 rounded-md" onClick={() => { setIsFormShown(!isFormShown) }}>
-                            <Plus />
-                        </button>
-                        <button onClick={logOut} className="p-3 hover:bg-gray-100 rounded-md">
-                            <SignOut />
-                        </button>
-                    </div>
+            <div>
+                <div className="w-full flex justify-between items-center overflow-x-auto snap-x snap-mandatory scroll-smooth">
+                    <img className="w-full block aspect-[16/8] snap-center" src="https://th.bing.com/th/id/OIP.CI71_QZJRHYc_PxnbMGmJAHaDG?rs=1&pid=ImgDetMain" alt="" />
+                    <img className="w-full block aspect-[16/8] snap-center" src="https://cdn.wallpapersafari.com/19/81/jdOZBL.jpg" alt="" />
+                    <img className="w-full block aspect-[16/8] snap-center" src="https://img.freepik.com/premium-photo/mountain-range-with-blue-purple-mountains-background_900396-9646.jpg" alt="" />
                 </div>
-            )}
-            <div className="w-full ">
-                <img className="w-full block" src="https://wallpapercave.com/wp/wp2639464.jpg" alt="" srcset="" />
+
+
+
+                {user && (
+                    <div className="shadow-md text-xl  text-center  flex w-full justify-between items-center px-6 py-4 ">
+                        <p>Hi! {user.name}!</p>
+
+                        <div className=" bg-slate-200 text-slate-6000 rounded-full transition-all duration-100 overflow-hidden">
+                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { setIsFormShown(!isFormShown) }}>
+                                <Plus />
+                            </button>
+                            <button onClick={logOut} className=" p-3 hover:bg-slate-600 hover:text-white">
+                                <SignOut />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
+
 
             <div className="hidden">
                 {
@@ -197,7 +206,7 @@ function ToDo() {
                 isFormShown && <div className="w-full fixed bottom-0  shadow-md rounded p-6 inset-0 bg-slate-900/40 flex items-end" >
                     <div className="bg-slate-900/10 inset-0 fixed " onClick={() => { setIsFormShown(false) }}></div>
                     <form onSubmit={handleAddTask}
-                        className="w-full bg-white shadow-md z-10  p-8 rounded-md ">
+                        className="w-full bg-white shadow-md z-10  p-8 rounded-2xl">
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Title</label>
                             <input
@@ -243,7 +252,7 @@ function ToDo() {
 
 
             {loading ? (
-                <p>Loading tasks...</p>
+                <p className="mt-12">Loading tasks...</p>
             ) : (
                 <div className="w-full bg-white flex-1  rounded px-8 pt-6 pb-8 ">
                     <h2 className="text-2xl font-light text-gray-800 flex items-center gap-2 py-2 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
@@ -278,7 +287,7 @@ function ToDo() {
                                                 value={singleTaskDescription}
                                                 onChange={(e) => setSingleTaskDescription(e.target.value)}
                                                 className=" w-full h-24 overflow-auto outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
-                                                
+
                                             />
                                         </>
                                     ) : (
