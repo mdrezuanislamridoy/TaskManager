@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Check, PencilSimple, Plus, SignOut, Trash, X } from "phosphor-react";
+import { Check, CheckSquareOffset, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
- 
+
 function ToDo() {
     const [isFormShown, setIsFormShown] = useState(false);
     const [title, setTitle] = useState("");
@@ -181,12 +181,14 @@ function ToDo() {
                 <img className="w-full block" src="https://wallpapercave.com/wp/wp2639464.jpg" alt="" srcset="" />
             </div>
 
-            {
-                message && setTimeout(() => {
-                    setMessage(null)
-                }, 2000)
-            }
-            {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-4 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-md z-50">
+            <div className="hidden">
+                {
+                    message && setTimeout(() => {
+                        setMessage(null)
+                    }, 3000)
+                }
+            </div>
+            {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-4 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900/70 text-white px-4 py-3 rounded-md z-50">
                 {message}
                 <X onClick={() => { setMessage(null) }}></X>
             </p>}
@@ -243,7 +245,13 @@ function ToDo() {
                 <p>Loading tasks...</p>
             ) : (
                 <div className="w-full bg-white flex-1  rounded px-8 pt-6 pb-8 ">
-                    <h2 className="text-2xl font-bold text-gray-800  ">Tasks</h2>
+                    <h2 className="text-2xl font-light text-gray-800 flex items-center gap-2 py-2 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
+                    {tasks.length === 0 && (
+                        <p className="text-gray-500 w-full text-center mt-16 flex items-center justify-center flex-col gap-2">
+                            <Warning size={32} />
+                            No tasks found
+                        </p>
+                    )}
                     {tasks.map((task) => (
                         <div key={task._id} className="flex items-start justify-between my-4 p-4 gap-2 rounded-lg border   hover:shadow-lg">
                             <input
@@ -261,11 +269,11 @@ function ToDo() {
                                                 type="text"
                                                 value={singleTaskTitle}
                                                 onChange={(e) => setSingleTaskTitle(e.target.value)}
-                                                className=" text-2xl font-bold w-full mb-2 outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 " 
+                                                className=" text-2xl font-bold w-full mb-2 outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
                                                 autoFocus
                                             />
-                                            <textarea 
-                                            
+                                            <textarea
+
                                                 type="text"
                                                 value={singleTaskDescription}
                                                 onChange={(e) => setSingleTaskDescription(e.target.value)}
