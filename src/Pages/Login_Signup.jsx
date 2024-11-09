@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/ContextProvider";
+import { X } from "phosphor-react";
 
 
 const serverUrl = 'https://taskmanager-server-production.up.railway.app'
@@ -36,7 +37,7 @@ export default function LoginSignup() {
                 
                 localStorage.setItem("token", response.data.token);
                 setIsSignup(false);
-                navigate("/");
+                window.location.href ='/'
             } catch (error) {
                 setMessage(
                     error.response?.data?.message || "Signup failed. Please try again."
@@ -137,7 +138,10 @@ export default function LoginSignup() {
                                 </button>
                             </form>
 
-                            {/* <p className=" my-4 text-center">{message}</p> */}
+                            <p className=" my-4 text-center">{message} 
+                                <X onClick={()=>{setMessage(null)}}></X>
+                            </p>
+
                             <p className="text-center my-4 ">OR</p>
 
                             <div className="mt-4 text-center">
