@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ArrowClockwise, Calendar, Check, CheckSquareOffset, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
+import { ArrowClockwise, Calendar, Check, CheckSquareOffset, NotePencil, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; 
 
@@ -215,6 +215,8 @@ function ToDo() {
                     <div className="bg-slate-900/10 inset-0 fixed " onClick={() => { setIsFormShown(false) }}></div>
                     <form onSubmit={handleAddTask}
                         className="w-full bg-white shadow-md z-10  p-8 rounded-2xl">
+
+                            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><NotePencil /> Create new task</h2>
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Title</label>
                             <input
@@ -276,7 +278,7 @@ function ToDo() {
                                 type="checkbox"
                                 onChange={() => handleCheckboxChange(task._id, task.completed)}
                                 checked={task.completed}
-                                className="  text-blue-600 text-xl"
+                                className="w-5 h-5 mt-2 text-blue-600 text-xl"
 
                             />
 
@@ -306,8 +308,10 @@ function ToDo() {
                                                 <Calendar className="w-4 h-4 mr-1" />
                                                 {new Date(task.date).toLocaleDateString()}
                                             </div>
-                                            <p className="text-gray-600 text-sm leading-relaxed">{task.description}</p>
-                                        </div>
+                                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all cursor-pointer">
+                                                {task.description}
+                                            </p>
+                                        </div>                                    
                                     )}
                                 </div>
 
