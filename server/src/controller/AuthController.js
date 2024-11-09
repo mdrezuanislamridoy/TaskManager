@@ -66,6 +66,7 @@ const Login = async (req, res) => {
         }
 
         const token = genarateToken(); 
+        user.token = token;
         await user.save();
 
         res.status(200).send({
@@ -79,17 +80,28 @@ const Login = async (req, res) => {
     }
 };
 
+const Logout = async (req, res ) => {
+  const uid = req.headers.uid;
+  const user = await User.findOne({ uid }); 
+  if (!user) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }else{
+    user.token = "";
+    user.save();
+    return res.status(200).send({ message: "Logged out successfully" });
+  }
+}
 
 let sessionVarifier = (req, res, next) => {
     const token = req.headers.authorization;
     if (!token) {
         return res.status(401).send({ message: "Unauthorized" });
     }
-    const user = User.findOne({ token });
+    const user =  User.findOne({ token });
     if (!user) {
         return res.status(401).send({ message: "Unauthorized" });
     }
     req.user = user;
     next();
 };
-module.exports = { Register, Login };
+module.exports = { Register, Login  , Logout};

@@ -20,6 +20,7 @@ function ToDo() {
     const [singleTaskTitle, setSingleTaskTitle] = useState("");
     const [singleTaskDescription, setSingleTaskDescription] = useState("");
 
+
     useEffect(() => {
         const uid = localStorage.getItem("uid");
 
@@ -51,7 +52,7 @@ function ToDo() {
 
     const logOut = async () => {
         const uid = localStorage.getItem("uid");
-        await axios.post("http://localhost:3003/api/user/logout", { headers: { uid } });
+        let res = await axios.post("http://localhost:3003/api/user/logout", { headers: { uid } });
         localStorage.removeItem("token");
         localStorage.removeItem("uid");
         window.location.reload();
@@ -150,7 +151,7 @@ function ToDo() {
 
     const resetForm = () => {
         setTitle("");
-        setDescription(""); 
+        setDescription("");
         setEditTaskId(null);
         setSingleTaskTitle("");
         setSingleTaskDescription("");
@@ -159,7 +160,7 @@ function ToDo() {
     return (
         <div className="min-h-screen bg-slate-100 flex flex-col items-center    ">
             {user && (
-                <div className="  text-xl bg-white shadow-lg text-center text-gray-500 flex w-full justify-between items-center px-3 py-4">
+                <div className="  text-xl bg-white shadow-lg text-center text-gray-500 flex w-full justify-between items-center px-6 py-4">
                     <p>Hi! {user.name}!</p>
                     <button onClick={logOut} className="p-3">
                         <SignOut />
@@ -167,9 +168,18 @@ function ToDo() {
                 </div>
             )}
 
-            {message && <p className="mb-4 text-sm text-center text-red-500 font-semibold">{message}</p>}
 
-            <form onSubmit={handleAddTask} className="w-full max-w-lg bg-white shadow-md rounded p-6 m-8 ">
+            {
+                message && setTimeout(() => {
+                    setMessage(null)
+                }, 2000)
+            }
+            {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-4 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-md">
+                {message}
+                <X onClick={() => { setMessage(null) }}></X>
+            </p>}
+
+            <form onSubmit={handleAddTask} className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <div className="mb-4">
                     <label className="block text-gray-700 font-bold mb-2">Title</label>
                     <input
@@ -200,7 +210,7 @@ function ToDo() {
                         className="w-full px-3 py-2 border border-gray-300 rounded"
                         required
                     />
-                    
+
                 </div>
                 <button
                     type="submit"
@@ -213,18 +223,19 @@ function ToDo() {
             {loading ? (
                 <p>Loading tasks...</p>
             ) : (
-                <div className="w-full max-w-lg bg-white shadow-md rounded p-6">
+                <div className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <h2 className="text-2xl font-bold text-gray-800  ">Tasks</h2>
                     {tasks.map((task) => (
-                        <div key={task._id} className="flex items-center justify-between my-4 p-4 gap-2 rounded-lg border gap-4  hover:shadow-lg">
+                        <div key={task._id} className="flex items-start justify-between my-4 p-4 gap-2 rounded-lg border   hover:shadow-lg">
                             <input
                                 type="checkbox"
                                 onChange={() => handleCheckboxChange(task._id, task.completed)}
                                 checked={task.completed}
-                                className="mr-4 h-5 w-5 text-blue-600"
+                                className="mt-2 mr-4 ml-2 h-5 w-5 text-blue-600"
                             />
-                            <div className="flex items-center justify-between w-full">
-                                <div>
+
+                            <div className="flex items-center justify-between w-full ">
+                                <div className="w-full">
                                     {editTaskId === task._id && isEditMode ? (
                                         <>
                                             <input
@@ -241,19 +252,20 @@ function ToDo() {
                                             />
                                         </>
                                     ) : (
-                                        <>
-                                            <h3 className={`text-xl font-bold ${task.completed ? "line-through text-gray-500" : "text-gray-800"}`}>
+                                        <div className="space-y-1 w-full   ">
+                                            <h3 className={`text-xl ${task.completed ? "line-through text-gray-500" : "text-gray-800"}`}>
                                                 {task.title}
                                             </h3>
+                                            <p className="text-gray-500 text-sm border-b w-full pb-2">Date: {new Date(task.date).toLocaleDateString()}</p>
                                             <p className="text-gray-600">{task.description}</p>
-                                            <p className="text-gray-500 text-sm">Date: {new Date(task.date).toLocaleDateString()}</p>
-                                        </>
+                                        </div>
                                     )}
                                 </div>
+
                                 <div className="">
                                     {editTaskId === task._id && isEditMode ? (
                                         <div className="flex items-center">
-                                            <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={()=>{deleteTodo(task._id)} }>
+                                            <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={() => { deleteTodo(task._id) }}>
                                                 <Trash />
                                             </button>
                                             <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={editTodo}>
