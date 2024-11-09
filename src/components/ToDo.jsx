@@ -42,7 +42,10 @@ function ToDo() {
                 const response = await axios.get(serverUrl + "/api/todos", {
                     headers: { uid }
                 });
-                setTasks(response.data);
+                let tasks = response.data
+                let flippedTask = tasks.reverse()
+                console.log(flippedTask);
+                setTasks(flippedTask);
             } catch (error) {
                 console.error("Failed to fetch tasks:", error);
             } finally {
@@ -269,7 +272,7 @@ function ToDo() {
                                 onChange={() => handleCheckboxChange(task._id, task.completed)}
                                 checked={task.completed}
                                 className="  text-blue-600 text-xl"
-                                
+
                             />
 
                             <div className="flex items-center w-full ">
@@ -305,16 +308,16 @@ function ToDo() {
                                 <div className="">
                                     {editTaskId === task._id && isEditMode ? (
                                         <div className="flex items-center flex-col">
-                                            <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={() => { deleteTodo(task._id) ; setMessage("Deleting task...") }}>
-                                                <Trash size={19}  />
+                                            <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={() => { deleteTodo(task._id); setMessage("Deleting task...") }}>
+                                                <Trash size={19} />
                                             </button>
-                                            <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={()=>{editTodo() ; setMessage("Updating task...")}}>
-                                                <Check size={19}  />
+                                            <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={() => { editTodo(); setMessage("Updating task...") }}>
+                                                <Check size={19} />
                                             </button>
                                         </div>
                                     ) : (
                                         <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={() => toggleEditMode(task._id)}>
-                                            <PencilSimple size={19}  />
+                                            <PencilSimple size={19} />
                                         </button>
                                     )}
                                 </div>
