@@ -207,6 +207,7 @@ function ToDo() {
                                 className="w-full px-3 py-2 border border-gray-300 rounded"
                                 placeholder="Enter task title"
                                 required
+                                autoFocus
                             />
                         </div>
                         <div className="mb-4">
@@ -273,11 +274,11 @@ function ToDo() {
                                                 autoFocus
                                             />
                                             <textarea
-
                                                 type="text"
                                                 value={singleTaskDescription}
                                                 onChange={(e) => setSingleTaskDescription(e.target.value)}
                                                 className=" w-full h-24 overflow-auto outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
+                                                
                                             />
                                         </>
                                     ) : (
