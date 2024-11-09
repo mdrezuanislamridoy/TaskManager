@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/ContextProvider";
 
+
+const serverUrl = 'https://taskmanager-server-production.up.railway.app'
+
 export default function LoginSignup() {
     const [isSignup, setIsSignup] = useState(false);
     const [message, setMessage] = useState("");
@@ -26,7 +29,7 @@ export default function LoginSignup() {
         if (isSignup) {
             try {
                 const response = await axios.post(
-                    "http://localhost:3003/api/user/signup",
+                    serverUrl+"/api/user/signup",
                     { name, email, password  }
                 );
                 setMessage(response.data.message);
@@ -42,7 +45,7 @@ export default function LoginSignup() {
         } else {
             try {
                 const response = await axios.post(
-                    "http://localhost:3003/api/user/login",
+                    serverUrl+"/api/user/login",
                     { email, password }
                 );
                 console.log(response.data);

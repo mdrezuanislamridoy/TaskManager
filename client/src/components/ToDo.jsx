@@ -1,62 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Check, PencilSimple, SignOut, Trash, X } from "phosphor-react";
+import { Check, PencilSimple, Plus, SignOut, Trash, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-function ToDo() {
-    const [tasks, setTasks] = useState([]);
+const NewTaskForm = () => {
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-    const [loading, setLoading] = useState(true);
-    const [message, setMessage] = useState("");
-    const [user, setUser] = useState(null);
-
-    // Editing state
-    const [isEditMode, setIsEditMode] = useState(false);
-    const [editTaskId, setEditTaskId] = useState();
-    const [singleTaskTitle, setSingleTaskTitle] = useState("");
-    const [singleTaskDescription, setSingleTaskDescription] = useState("");
-
-
-    useEffect(() => {
-        const uid = localStorage.getItem("uid");
-
-        const getCurrentUser = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3003/api/u/user/${uid}`);
-                setUser(response.data);
-            } catch (error) {
-                console.error("Failed to get user:", error);
-            }
-        };
-
-        const fetchTasks = async () => {
-            try {
-                const response = await axios.get("http://localhost:3003/api/todos", {
-                    headers: { uid }
-                });
-                setTasks(response.data);
-            } catch (error) {
-                console.error("Failed to fetch tasks:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        getCurrentUser();
-        fetchTasks();
-    }, []);
-
-    const logOut = async () => {
-        const uid = localStorage.getItem("uid");
-        let res = await axios.post("http://localhost:3003/api/user/logout", { headers: { uid } });
-        localStorage.removeItem("token");
-        localStorage.removeItem("uid");
-        window.location.reload();
-    };
 
     const handleAddTask = async (e) => {
         e.preventDefault();
@@ -66,7 +19,7 @@ function ToDo() {
         }
 
         try {
-            const response = await axios.post("http://localhost:3003/api/todos", {
+            const response = await axios.post(serverUrl + "/api/todos", {
                 title,
                 description,
                 date,
@@ -83,10 +36,109 @@ function ToDo() {
         }
     };
 
+    return (
+        <form onSubmit={handleAddTask}
+            className="w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 ">
+            <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2">Title</label>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    placeholder="Enter task title"
+                    required
+                />
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2">Description</label>
+                <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    placeholder="Enter task description"
+                    required
+                />
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2">Task Date</label>
+                <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    required
+                />
+
+            </div>
+            <button
+                type="submit"
+                className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
+            >
+                Add Task
+            </button>
+        </form> 
+    )
+
+}
+function ToDo() {
+    const [isFormShown, setIsFormShown] = useState(false);
+
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [message, setMessage] = useState("");
+    const [user, setUser] = useState(null);
+
+    // Editing state
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editTaskId, setEditTaskId] = useState();
+    const [singleTaskTitle, setSingleTaskTitle] = useState("");
+    const [singleTaskDescription, setSingleTaskDescription] = useState("");
+
+    const serverUrl = 'https://taskmanager-server-production.up.railway.app'
+
+    useEffect(() => {
+        const uid = localStorage.getItem("uid");
+
+        const getCurrentUser = async () => {
+            try {
+                const response = await axios.get(`${serverUrl}/api/u/user/${uid}`);
+                setUser(response.data);
+            } catch (error) {
+                console.error("Failed to get user:", error);
+            }
+        };
+
+        const fetchTasks = async () => {
+            try {
+                const response = await axios.get(serverUrl + "/api/todos", {
+                    headers: { uid }
+                });
+                setTasks(response.data);
+            } catch (error) {
+                console.error("Failed to fetch tasks:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        getCurrentUser();
+        fetchTasks();
+    }, []);
+
+    const logOut = async () => {
+        const uid = localStorage.getItem("uid");
+        let res = await axios.post(serverUrl + "/api/user/logout", { headers: { uid } });
+        localStorage.removeItem("token");
+        localStorage.removeItem("uid");
+        window.location.reload();
+    };
+
+
     const handleCheckboxChange = async (taskId, currentStatus) => {
         try {
             const updatedStatus = !currentStatus;
-            await axios.put(`http://localhost:3003/api/todos/${taskId}`, { completed: updatedStatus });
+            await axios.put(`${serverUrl}/api/todos/${taskId}`, { completed: updatedStatus });
 
             setTasks((prev) =>
                 prev.map((task) =>
@@ -117,7 +169,7 @@ function ToDo() {
         if (!editTaskId) return;
 
         try {
-            await axios.put(`http://localhost:3003/api/todos/edit/${editTaskId}`, {
+            await axios.put(`${serverUrl}/api/todos/edit/${editTaskId}`, {
                 title: singleTaskTitle,
                 description: singleTaskDescription
             });
@@ -140,7 +192,7 @@ function ToDo() {
     };
     const deleteTodo = async (taskId) => {
         try {
-            await axios.delete(`http://localhost:3003/api/todos/${taskId}`);
+            await axios.delete(`${serverUrl}/api/todos/${taskId}`);
             setTasks((prev) => prev.filter((task) => task._id !== taskId));
             setMessage("Task deleted successfully!");
         } catch (error) {
@@ -158,16 +210,24 @@ function ToDo() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex flex-col items-center    ">
+        <div className="min-h-screen bg-slate-100 flex flex-col items-center relative ">
             {user && (
-                <div className="  text-xl bg-white shadow-lg text-center text-gray-500 flex w-full justify-between items-center px-6 py-4">
+                <div className="sticky top-0 shadow-md  text-xl bg-white text-center text-gray-500 flex w-full justify-between items-center px-6 py-4">
                     <p>Hi! {user.name}!</p>
-                    <button onClick={logOut} className="p-3">
-                        <SignOut />
-                    </button>
+                    <div>
+                        <button className="p-3 hover:bg-gray-100 rounded-md" onClick={() => { setIsFormShown(!isFormShown) }}>
+                            <Plus />
+                        </button>
+                        <button onClick={logOut} className="p-3 hover:bg-gray-100 rounded-md">
+                            <SignOut />
+                        </button>
+                    </div>
                 </div>
             )}
 
+            <div className="w-full ">
+                <img className="w-full block" src="https://wallpapercave.com/wp/wp6943005.jpg" alt="" srcset="" />
+            </div>
 
             {
                 message && setTimeout(() => {
@@ -179,51 +239,17 @@ function ToDo() {
                 <X onClick={() => { setMessage(null) }}></X>
             </p>}
 
-            <form onSubmit={handleAddTask} className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">Title</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
-                        placeholder="Enter task title"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">Description</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
-                        placeholder="Enter task description"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">Task Date</label>
-                    <input
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
-                        required
-                    />
+            {
+                isFormShown && <div className="w-full fixed bottom-0  shadow-md rounded p-6 inset-0 bg-slate-900/40 flex items-end">
+                    <NewTaskForm></NewTaskForm>
+                    </div>
+            }
 
-                </div>
-                <button
-                    type="submit"
-                    className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
-                >
-                    Add Task
-                </button>
-            </form>
 
             {loading ? (
                 <p>Loading tasks...</p>
             ) : (
-                <div className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div className="w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <h2 className="text-2xl font-bold text-gray-800  ">Tasks</h2>
                     {tasks.map((task) => (
                         <div key={task._id} className="flex items-start justify-between my-4 p-4 gap-2 rounded-lg border   hover:shadow-lg">
