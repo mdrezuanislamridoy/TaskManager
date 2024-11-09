@@ -5,84 +5,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const NewTaskForm = () => {
-
+ 
+function ToDo() {
+    const [isFormShown, setIsFormShown] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-
-    const handleAddTask = async (e) => {
-        e.preventDefault();
-        if (!title || !description || !date) {
-            setMessage("All fields are required.");
-            return;
-        }
-
-        try {
-            const response = await axios.post(serverUrl + "/api/todos", {
-                title,
-                description,
-                date,
-                completed: false,
-                userId: localStorage.getItem("uid")
-            });
-
-            setTasks((prev) => [...prev, response.data]);
-            resetForm();
-            setMessage("Task added successfully!");
-        } catch (error) {
-            console.error("Failed to add task:", error);
-            setMessage("Failed to add task. Please try again.");
-        }
-    };
-
-    return (
-        <form onSubmit={handleAddTask}
-            className="w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 ">
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Title</label>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    placeholder="Enter task title"
-                    required
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Description</label>
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    placeholder="Enter task description"
-                    required
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Task Date</label>
-                <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    required
-                />
-
-            </div>
-            <button
-                type="submit"
-                className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
-            >
-                Add Task
-            </button>
-        </form> 
-    )
-
-}
-function ToDo() {
-    const [isFormShown, setIsFormShown] = useState(false);
 
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -208,11 +136,36 @@ function ToDo() {
         setSingleTaskTitle("");
         setSingleTaskDescription("");
     };
+    const handleAddTask = async (e) => {
+        e.preventDefault();
+        if (!title || !description || !date) {
+            setMessage("All fields are required.");
+            return;
+        }
+
+        try {
+            const response = await axios.post(serverUrl + "/api/todos", {
+                title,
+                description,
+                date,
+                completed: false,
+                userId: localStorage.getItem("uid")
+            });
+
+            setTasks((prev) => [...prev, response.data]);
+            resetForm();
+            setMessage("Task added successfully!");
+            setIsFormShown(false)
+        } catch (error) {
+            console.error("Failed to add task:", error);
+            setMessage("Failed to add task. Please try again.");
+        }
+    };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex flex-col items-center relative ">
+        <div className=" border shadow-2xl h-screen m-auto flex flex-col items-center relative md:w-[480px] md:aspect-[2/3] md:mt-12">
             {user && (
-                <div className="sticky top-0 shadow-md  text-xl bg-white text-center text-gray-500 flex w-full justify-between items-center px-6 py-4">
+                <div className="sticky top-0 shadow-md  text-xl bg-white text-center text-gray-500 flex w-full justify-between items-center px-6 py-4 ">
                     <p>Hi! {user.name}!</p>
                     <div>
                         <button className="p-3 hover:bg-gray-100 rounded-md" onClick={() => { setIsFormShown(!isFormShown) }}>
@@ -224,9 +177,8 @@ function ToDo() {
                     </div>
                 </div>
             )}
-
             <div className="w-full ">
-                <img className="w-full block" src="https://wallpapercave.com/wp/wp6943005.jpg" alt="" srcset="" />
+                <img className="w-full block" src="https://wallpapercave.com/wp/wp2639464.jpg" alt="" srcset="" />
             </div>
 
             {
@@ -234,22 +186,63 @@ function ToDo() {
                     setMessage(null)
                 }, 2000)
             }
-            {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-4 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-md">
+            {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-4 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-md z-50">
                 {message}
                 <X onClick={() => { setMessage(null) }}></X>
             </p>}
 
             {
-                isFormShown && <div className="w-full fixed bottom-0  shadow-md rounded p-6 inset-0 bg-slate-900/40 flex items-end">
-                    <NewTaskForm></NewTaskForm>
-                    </div>
+                isFormShown && <div className="w-full fixed bottom-0  shadow-md rounded p-6 inset-0 bg-slate-900/40 flex items-end" >
+                    <div className="bg-slate-900/10 inset-0 fixed " onClick={() => { setIsFormShown(false) }}></div>
+                    <form onSubmit={handleAddTask}
+                        className="w-full bg-white shadow-md z-10  p-8 rounded-md ">
+                        <div className="mb-4">
+                            <label className="block text-gray-700 font-bold mb-2">Title</label>
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded"
+                                placeholder="Enter task title"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 font-bold mb-2">Description</label>
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded"
+                                placeholder="Enter task description"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 font-bold mb-2">Task Date</label>
+                            <input
+                                type="date"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded"
+                                required
+                            />
+
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-slate-500 text-white font-bold py-2 px-4 rounded hover:bg-slate-600"
+                        >
+                            Add Task
+                        </button>
+                    </form>
+                </div>
             }
 
 
             {loading ? (
                 <p>Loading tasks...</p>
             ) : (
-                <div className="w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div className="w-full bg-white flex-1  rounded px-8 pt-6 pb-8 ">
                     <h2 className="text-2xl font-bold text-gray-800  ">Tasks</h2>
                     {tasks.map((task) => (
                         <div key={task._id} className="flex items-start justify-between my-4 p-4 gap-2 rounded-lg border   hover:shadow-lg">

@@ -60,11 +60,10 @@ export default function LoginSignup() {
         }
     };
 
-    return (
-        <div className="relative  bg-gradient-to-br from-sky-50 to-gray-200">
+    return ( 
             <div className="relative m-auto h-screen flex items-center justify-center text-gray-500 ">
                 <div className="m-auto w-[480px] ">
-                    <div className="rounded-xl bg-white shadow-xl">
+                    <div className="rounded-xl bg-white ">
                         <div className="p-16">
                             <div className="space-y-2 text-left mb-4">
                                 <img src="https://png.pngtree.com/png-clipart/20190705/original/pngtree-vector-notes-icon-png-image_4256335.jpg" alt="logo" className=" mb-4 h-16 w-auto" />
@@ -182,7 +181,6 @@ export default function LoginSignup() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div> 
     );
 }
