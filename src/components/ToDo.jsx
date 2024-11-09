@@ -261,13 +261,15 @@ function ToDo() {
                                                 type="text"
                                                 value={singleTaskTitle}
                                                 onChange={(e) => setSingleTaskTitle(e.target.value)}
-                                                className="border-b text-2xl font-bold w-full mb-2"
+                                                className=" text-2xl font-bold w-full mb-2 outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 " 
+                                                autoFocus
                                             />
-                                            <input
+                                            <textarea 
+                                            
                                                 type="text"
                                                 value={singleTaskDescription}
                                                 onChange={(e) => setSingleTaskDescription(e.target.value)}
-                                                className="border-b w-full overflow-auto"
+                                                className=" w-full h-24 overflow-auto outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
                                             />
                                         </>
                                     ) : (
