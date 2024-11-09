@@ -164,7 +164,7 @@ function ToDo() {
 
     return (
         <div className=" border shadow-2xl h-screen m-auto flex flex-col items-center relative md:w-[480px] md:aspect-[2/3] md:mt-12">
-            <div>
+            <div className="border-b">
                 <div className="w-full flex justify-between items-center overflow-x-auto snap-x snap-mandatory scroll-smooth">
                     <img className="w-full block aspect-[16/8] snap-center" src="https://th.bing.com/th/id/OIP.CI71_QZJRHYc_PxnbMGmJAHaDG?rs=1&pid=ImgDetMain" alt="" />
                     <img className="w-full block aspect-[16/8] snap-center" src="https://cdn.wallpapersafari.com/19/81/jdOZBL.jpg" alt="" />
@@ -174,10 +174,10 @@ function ToDo() {
 
 
                 {user && (
-                    <div className="shadow-md text-xl  text-center  flex w-full justify-between items-center px-6 py-4 ">
+                    <div className=" text-xl  text-center  flex w-full justify-between items-center px-6 py-4 ">
                         <p>Hi! {user.name}!</p>
 
-                        <div className=" bg-slate-200 text-slate-6000 rounded-full transition-all duration-100 overflow-hidden">
+                        <div className="  ">
                             <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { setIsFormShown(!isFormShown) }}>
                                 <Plus />
                             </button>
@@ -194,12 +194,12 @@ function ToDo() {
                 {
                     message && setTimeout(() => {
                         setMessage(null)
-                    }, 3000)
+                    }, 300)
                 }
             </div>
-            {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-4 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900/70 text-white px-4 py-3 rounded-md z-50">
+            {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-6 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-700 text-white px-4 py-3 rounded-md z-50 ">
                 {message}
-                <X onClick={() => { setMessage(null) }}></X>
+                {/* <X onClick={() => { setMessage(null) }}></X> */}
             </p>}
 
             {
@@ -254,7 +254,7 @@ function ToDo() {
             {loading ? (
                 <p className="mt-12">Loading tasks...</p>
             ) : (
-                <div className="w-full bg-white flex-1  rounded px-8 pt-6 pb-8 ">
+                <div className="w-full bg-white flex-1  rounded p-6 space-y-6">
                     <h2 className="text-2xl font-light text-gray-800 flex items-center gap-2 py-2 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
                     {tasks.length === 0 && (
                         <p className="text-gray-500 w-full text-center mt-16 flex items-center justify-center flex-col gap-2">
@@ -263,33 +263,34 @@ function ToDo() {
                         </p>
                     )}
                     {tasks.map((task) => (
-                        <div key={task._id} className="flex items-start justify-between my-4 p-4 gap-2 rounded-lg border   hover:shadow-lg">
+                        <div key={task._id} className="flex items-cneter gap-4 justify-between rounded-lg border  hover:shadow-lg p-5 pr-2">
                             <input
                                 type="checkbox"
                                 onChange={() => handleCheckboxChange(task._id, task.completed)}
                                 checked={task.completed}
-                                className="mt-2 mr-4 ml-2 h-5 w-5 text-blue-600"
+                                className="  text-blue-600 text-xl"
+                                
                             />
 
-                            <div className="flex items-center justify-between w-full ">
+                            <div className="flex items-center w-full ">
                                 <div className="w-full">
                                     {editTaskId === task._id && isEditMode ? (
-                                        <>
+                                        <div className="ml-2">
                                             <input
                                                 type="text"
                                                 value={singleTaskTitle}
                                                 onChange={(e) => setSingleTaskTitle(e.target.value)}
-                                                className=" text-2xl font-bold w-full mb-2 outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
+                                                className=" animate-pulse text-xl font-bold w-full mb-2 outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
                                                 autoFocus
                                             />
                                             <textarea
                                                 type="text"
                                                 value={singleTaskDescription}
                                                 onChange={(e) => setSingleTaskDescription(e.target.value)}
-                                                className=" w-full h-24 overflow-auto outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
+                                                className=" w-full h-auto overflow-auto outline-0 focus:border focus:p-3 animate-pulse focus:bg-gray-50 rounded-md transition-all duration-100 "
 
                                             />
-                                        </>
+                                        </div>
                                     ) : (
                                         <div className="space-y-1 w-full   ">
                                             <h3 className={`text-xl ${task.completed ? "line-through text-gray-500" : "text-gray-800"}`}>
@@ -303,17 +304,17 @@ function ToDo() {
 
                                 <div className="">
                                     {editTaskId === task._id && isEditMode ? (
-                                        <div className="flex items-center">
-                                            <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={() => { deleteTodo(task._id) }}>
-                                                <Trash />
+                                        <div className="flex items-center flex-col">
+                                            <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={() => { deleteTodo(task._id) ; setMessage("Deleting task...") }}>
+                                                <Trash size={19}  />
                                             </button>
-                                            <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={editTodo}>
-                                                <Check />
+                                            <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={()=>{editTodo() ; setMessage("Updating task...")}}>
+                                                <Check size={19}  />
                                             </button>
                                         </div>
                                     ) : (
                                         <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={() => toggleEditMode(task._id)}>
-                                            <PencilSimple />
+                                            <PencilSimple size={19}  />
                                         </button>
                                     )}
                                 </div>
