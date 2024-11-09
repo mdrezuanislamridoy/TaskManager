@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ArrowClockwise, Check, CheckSquareOffset, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
+import { ArrowClockwise, Calendar, Check, CheckSquareOffset, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-
+import "react-datepicker/dist/react-datepicker.css"; 
 
 function ToDo() {
     const [isFormShown, setIsFormShown] = useState(false);
@@ -282,37 +280,38 @@ function ToDo() {
 
                             />
 
-                            <div className="flex items-center w-full ">
-                                <div className="w-full">
+                            <div className="flex items-center w-full gap-4">
+                                <div className="flex-1">
                                     {editTaskId === task._id && isEditMode ? (
-                                        <div className="ml-2">
+                                        <div className="space-y-3 p-2 bg-gray-50 rounded-lg">
                                             <input
                                                 type="text"
                                                 value={singleTaskTitle}
                                                 onChange={(e) => setSingleTaskTitle(e.target.value)}
-                                                className=" animate-pulse text-xl font-bold w-full mb-2 outline-0 focus:border focus:p-3 focus:bg-gray-50 rounded-md transition-all duration-100 "
+                                                className="w-full text-lg font-semibold px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                                 autoFocus
                                             />
                                             <textarea
-                                                type="text"
                                                 value={singleTaskDescription}
                                                 onChange={(e) => setSingleTaskDescription(e.target.value)}
-                                                className=" w-full h-auto overflow-auto outline-0 focus:border focus:p-3 animate-pulse focus:bg-gray-50 rounded-md transition-all duration-100 "
-
+                                                className="w-full min-h-[80px] px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
                                             />
                                         </div>
                                     ) : (
-                                        <div className="space-y-1 w-full   ">
-                                            <h3 className={`text-xl ${task.completed ? "line-through text-gray-500" : "text-gray-800"}`}>
+                                        <div className="space-y-2">
+                                            <h3 className={`text-lg font-semibold ${task.completed ? "line-through text-gray-400" : "text-gray-800"}`}>
                                                 {task.title}
                                             </h3>
-                                            <p className="text-gray-500 text-sm border-b w-full pb-2">Date: {new Date(task.date).toLocaleDateString()}</p>
-                                            <p className="text-gray-600">{task.description}</p>
+                                            <div className="flex items-center text-sm text-gray-500 border-b border-gray-100 pb-2">
+                                                <Calendar className="w-4 h-4 mr-1" />
+                                                {new Date(task.date).toLocaleDateString()}
+                                            </div>
+                                            <p className="text-gray-600 text-sm leading-relaxed">{task.description}</p>
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="">
+                                <div className="flex-shrink-0">
                                     {editTaskId === task._id && isEditMode ? (
                                         <div className="flex items-center flex-col">
                                             <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={() => { deleteTodo(task._id); setMessage("Deleting task...") }}>
