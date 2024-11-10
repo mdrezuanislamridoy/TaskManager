@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ArrowClockwise, Calendar, Check, CheckSquareOffset, NotePencil, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
+import { ArrowClockwise, Calendar, Check, CheckSquareOffset, MagnifyingGlass, NotePencil, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; 
+import "react-datepicker/dist/react-datepicker.css";
 
 function ToDo() {
     const [isFormShown, setIsFormShown] = useState(false);
+    const [isSearchPageShown, setIsSearchPageShown] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
@@ -174,20 +175,21 @@ function ToDo() {
                     <img className="w-full block aspect-[16/8] snap-center" src="https://img.uhdpaper.com/wallpaper/sunset-mountain-minimalist-digital-art-658@2@b" alt="" />
                     <img className="w-full block aspect-[16/8] snap-center" src="https://th.bing.com/th/id/OIP.7mOOPZD3aJEg1bot_RYVBgHaEU?rs=1&pid=ImgDetMain" alt="" />
                     <img className="w-full block aspect-[16/8] snap-center" src="https://wallpaperaccess.com/full/1194354.jpg" alt="" />
+
                 </div>
-
-
 
                 {user && (
                     <div className=" text-xl  text-center  flex w-full justify-between items-center px-6 py-4 ">
                         <p>Hi! {user.name}!</p>
-
                         <div className="  ">
-                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => {  window.location.reload() }}>
-                                <ArrowClockwise />
-                            </button>
                             <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { setIsFormShown(!isFormShown) }}>
                                 <Plus />
+                            </button>
+                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { window.location.reload() }}>
+                                <ArrowClockwise />
+                            </button>
+                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => {setIsSearchPageShown(!isSearchPageShown); setIsFormShown(false) }}>
+                                <MagnifyingGlass />
                             </button>
                             <button onClick={logOut} className=" p-3 hover:bg-slate-600 hover:text-white">
                                 <SignOut />
@@ -197,7 +199,6 @@ function ToDo() {
                 )}
             </div>
 
-
             <div className="hidden">
                 {
                     message && setTimeout(() => {
@@ -205,18 +206,36 @@ function ToDo() {
                     }, 3000)
                 }
             </div>
+
             {message && <p className=" flex items-center gap-3 shadow-xl justify-between text-nowrap mb-6 text-sm text-center font-semibold fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-700 text-white px-4 py-3 rounded-md z-50 ">
                 {message}
-                {/* <X onClick={() => { setMessage(null) }}></X> */}
             </p>}
 
+            {isSearchPageShown &&
+                <div className="w-full fixed shadow-md rounded p-6 inset-0 backdrop-blur-sm bg-slate-700/10 flex items-start"  >
+                    <div className="inset-1 fixed" onClick={()=>{setIsSearchPageShown(!isSearchPageShown)}}></div>
+                    {/* <div className="w-full shadow-lg z-10 p-8 rounded-2xl"> */}
+                        <div className="relative flex items-center w-full ">
+                            <input
+                                type="text"
+                                className="w-full px-6 py-3 pl-12 text-lg focus:outline-none border border-gray-200 rounded-sm hover:shadow-md focus:shadow-lg transition-shadow duration-200 focus:border-gray-300"
+                                placeholder="Search tasks..."
+                                autoFocus
+                            />
+                            <div className="absolute left-4 text-gray-400">
+                                <MagnifyingGlass size={20} />
+                            </div>
+                        </div>
+                    {/* </div>                */}
+                </div>
+            }
             {
                 isFormShown && <div className="w-full fixed bottom-0  shadow-md rounded p-6 inset-0 bg-slate-900/40 flex items-end" >
                     <div className="bg-slate-900/10 inset-0 fixed " onClick={() => { setIsFormShown(false) }}></div>
                     <form onSubmit={handleAddTask}
                         className="w-full bg-white shadow-md z-10  p-8 rounded-2xl">
 
-                            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><NotePencil /> Create new task</h2>
+                        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><NotePencil /> Create new task</h2>
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2">Title</label>
                             <input
@@ -311,7 +330,7 @@ function ToDo() {
                                             <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all cursor-pointer whitespace-pre-wrap">
                                                 {task.description}
                                             </p>
-                                        </div>                                    
+                                        </div>
                                     )}
                                 </div>
 
