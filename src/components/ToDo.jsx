@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ArrowClockwise, Calendar, Check, CheckSquareOffset, MagnifyingGlass, NotePencil, PencilSimple, Plus, SignOut, Trash, Warning, X } from "phosphor-react";
+import { ArrowClockwise, Calendar, Check, CheckSquareOffset, MagnifyingGlass, NotePencil, PencilSimple, Plus, SignOut, SortAscending, Trash, Warning, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -42,9 +42,10 @@ function ToDo() {
                     headers: { uid }
                 });
                 let tasks = response.data
-                let flippedTask = tasks.reverse()
-                console.log(flippedTask);
-                setTasks(flippedTask);
+                tasks.sort((a, b) => { 
+                    return new Date(b.date) - new Date(a.date);
+                });                
+                setTasks(tasks);
             } catch (error) {
                 console.error("Failed to fetch tasks:", error);
             } finally {
@@ -55,6 +56,17 @@ function ToDo() {
         getCurrentUser();
         fetchTasks();
     }, []);
+
+    const sortByIncomplete = () => {
+        setTasks((prevTasks) => {
+            return [...prevTasks].sort((a, b) => {
+                if (a.completed === b.completed) {
+                    return new Date(b.updatedAt) - new Date(a.updatedAt);
+                }
+                return a.completed ? 1 : -1;
+            });
+        });
+    }
 
     const logOut = async () => {
         const uid = localStorage.getItem("uid");
@@ -166,7 +178,7 @@ function ToDo() {
 
     return (
         <div className=" border shadow-2xl h-screen m-auto flex flex-col items-center relative md:w-[480px] md:aspect-[2/3] md:mt-12">
-            <div className="border-b">
+            <div className="border-b ">
                 <div className="w-full flex justify-between items-center overflow-x-auto snap-x snap-mandatory scroll-smooth">
                     <img className="w-full block aspect-[16/8] snap-center" src="https://th.bing.com/th/id/OIP.CI71_QZJRHYc_PxnbMGmJAHaDG?rs=1&pid=ImgDetMain" alt="" />
                     <img className="w-full block aspect-[16/8] snap-center" src="https://cdn.wallpapersafari.com/19/81/jdOZBL.jpg" alt="" />
@@ -177,27 +189,28 @@ function ToDo() {
                     <img className="w-full block aspect-[16/8] snap-center" src="https://wallpaperaccess.com/full/1194354.jpg" alt="" />
 
                 </div>
-
-                {user && (
-                    <div className=" text-xl  text-center  flex w-full justify-between items-center px-6 py-4 ">
-                        <p>Hi! {user.name}!</p>
-                        <div className="  ">
-                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { setIsFormShown(!isFormShown) }}>
-                                <Plus />
-                            </button>
-                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { window.location.reload() }}>
-                                <ArrowClockwise />
-                            </button>
-                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => {setIsSearchPageShown(!isSearchPageShown); setIsFormShown(false) }}>
-                                <MagnifyingGlass />
-                            </button>
-                            <button onClick={logOut} className=" p-3 hover:bg-slate-600 hover:text-white">
-                                <SignOut />
-                            </button>
-                        </div>
-                    </div>
-                )}
             </div>
+
+            {user && (
+                <div className=" text-xl  text-center  flex w-full justify-between items-center px-6 py-4 sticky top-0 bg-white shadow-md ">
+                    <p>Hi! {user.name}!</p>
+                    <div className="  ">
+                        <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { setIsFormShown(!isFormShown) }}>
+                            <Plus />
+                        </button>
+
+                        <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { window.location.reload() }}>
+                            <ArrowClockwise />
+                        </button>
+                        <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { setIsSearchPageShown(!isSearchPageShown); setIsFormShown(false) }}>
+                            <MagnifyingGlass />
+                        </button>
+                        <button onClick={logOut} className=" p-3 hover:bg-slate-600 hover:text-white">
+                            <SignOut />
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <div className="hidden">
                 {
@@ -213,19 +226,19 @@ function ToDo() {
 
             {isSearchPageShown &&
                 <div className="w-full fixed shadow-md rounded p-6 inset-0 backdrop-blur-sm bg-slate-700/10 flex items-start"  >
-                    <div className="inset-1 fixed" onClick={()=>{setIsSearchPageShown(!isSearchPageShown)}}></div>
+                    <div className="inset-1 fixed" onClick={() => { setIsSearchPageShown(!isSearchPageShown) }}></div>
                     {/* <div className="w-full shadow-lg z-10 p-8 rounded-2xl"> */}
-                        <div className="relative flex items-center w-full ">
-                            <input
-                                type="text"
-                                className="w-full px-6 py-3 pl-12 text-lg focus:outline-none border border-gray-200 rounded-sm hover:shadow-md focus:shadow-lg transition-shadow duration-200 focus:border-gray-300"
-                                placeholder="Search tasks..."
-                                autoFocus
-                            />
-                            <div className="absolute left-4 text-gray-400">
-                                <MagnifyingGlass size={20} />
-                            </div>
+                    <div className="relative flex items-center w-full ">
+                        <input
+                            type="text"
+                            className="w-full px-6 py-3 pl-12 text-lg focus:outline-none border border-gray-200 rounded-sm hover:shadow-md focus:shadow-lg transition-shadow duration-200 focus:border-gray-300"
+                            placeholder="Search tasks..."
+                            autoFocus
+                        />
+                        <div className="absolute left-4 text-gray-400">
+                            <MagnifyingGlass size={20} />
                         </div>
+                    </div>
                     {/* </div>                */}
                 </div>
             }
@@ -284,7 +297,12 @@ function ToDo() {
                 <p className="mt-12">Loading tasks...</p>
             ) : (
                 <div className="w-full bg-white flex-1  rounded p-6 space-y-6">
-                    <h2 className="text-2xl font-light text-gray-800 flex items-center gap-2 py-2 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
+                    <div className="flex items-center justify-between text-2xl">
+                        <h2 className=" font-light text-gray-800 flex items-center gap-2 py-2 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
+                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={sortByIncomplete}>
+                                <SortAscending />
+                            </button>
+                    </div>
                     {tasks.length === 0 && (
                         <p className="text-gray-500 w-full text-center mt-16 flex items-center justify-center flex-col gap-2">
                             <Warning size={32} />
@@ -327,7 +345,7 @@ function ToDo() {
                                                 <Calendar className="w-4 h-4 mr-1" />
                                                 {new Date(task.date).toLocaleDateString()}
                                             </div>
-                                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all cursor-pointer whitespace-pre-wrap">
+                                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all duration-100 cursor-pointer whitespace-pre-wrap">
                                                 {task.description}
                                             </p>
                                         </div>
