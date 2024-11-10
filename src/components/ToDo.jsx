@@ -42,9 +42,13 @@ function ToDo() {
                     headers: { uid }
                 });
                 let tasks = response.data
-                tasks.sort((a, b) => { 
-                    return new Date(b.date) - new Date(a.date);
-                });                
+                tasks.sort((a, b) => {
+                    const dateComparison = new Date(b.date) - new Date(a.date);
+                    if (dateComparison === 0) {
+                        return a.completed === b.completed ? 0 : a.completed ? 1 : -1;
+                    }
+                    return dateComparison;
+                });
                 setTasks(tasks);
             } catch (error) {
                 console.error("Failed to fetch tasks:", error);
