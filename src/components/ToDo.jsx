@@ -308,7 +308,7 @@ function ToDo() {
                                                 <Calendar className="w-4 h-4 mr-1" />
                                                 {new Date(task.date).toLocaleDateString()}
                                             </div>
-                                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all cursor-pointer">
+                                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all cursor-pointer whitespace-pre-wrap">
                                                 {task.description}
                                             </p>
                                         </div>                                    
