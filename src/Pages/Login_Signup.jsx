@@ -5,7 +5,8 @@ import { Context } from "../context/ContextProvider";
 import { Spinner, X } from "phosphor-react";
 
 
-const serverUrl = 'https://taskmanager-server-production.up.railway.app'
+// const serverUrl = 'https://taskmanager-server-production.up.railway.app'
+const serverUrl = 'http://localhost:3003'
 
 export default function LoginSignup() {
     const [isSignup, setIsSignup] = useState(false);

@@ -22,7 +22,8 @@ function ToDo() {
     const [singleTaskTitle, setSingleTaskTitle] = useState("");
     const [singleTaskDescription, setSingleTaskDescription] = useState("");
 
-    const serverUrl = 'https://taskmanager-server-production.up.railway.app'
+    // const serverUrl = 'https://taskmanager-server-production.up.railway.app'
+    const serverUrl = 'http://localhost:3003'
 
     useEffect(() => {
         const uid = localStorage.getItem("uid");
