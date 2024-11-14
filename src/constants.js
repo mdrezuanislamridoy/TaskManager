@@ -3,6 +3,7 @@
 
 
 const constants = {
-    serverUrl: process.env.SERVER_URL 
+    serverUrl: "https://taskmanager-server-production.up.railway.app",
 };
+
 export default constants;
