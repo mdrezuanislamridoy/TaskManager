@@ -3,6 +3,7 @@ import axios from "axios";
 import { ArrowClockwise, Calendar, Check, CheckSquareOffset, MagnifyingGlass, NotePencil, PencilSimple, Plus, SignOut, SortAscending, Trash, Warning, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import constants from "../constants";
 
 function ToDo() {
     const [isFormShown, setIsFormShown] = useState(false);
@@ -22,8 +23,7 @@ function ToDo() {
     const [singleTaskTitle, setSingleTaskTitle] = useState("");
     const [singleTaskDescription, setSingleTaskDescription] = useState("");
 
-    // const serverUrl = 'https://taskmanager-server-production.up.railway.app'
-    const serverUrl = 'http://localhost:3003'
+    const serverUrl = constants.serverUrl
 
     useEffect(() => {
         const uid = localStorage.getItem("uid");

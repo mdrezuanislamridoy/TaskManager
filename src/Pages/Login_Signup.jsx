@@ -3,10 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/ContextProvider";
 import { Spinner, X } from "phosphor-react";
+import constants from "../constants";
 
 
-// const serverUrl = 'https://taskmanager-server-production.up.railway.app'
-const serverUrl = 'http://localhost:3003'
+const serverUrl = constants.serverUrl 
 
 export default function LoginSignup() {
     const [isSignup, setIsSignup] = useState(false);
