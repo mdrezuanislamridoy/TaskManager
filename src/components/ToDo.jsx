@@ -3,7 +3,7 @@ import axios from "axios";
 import { ArrowClockwise, Calendar, Check, CheckSquareOffset, MagnifyingGlass, NotePencil, PencilSimple, Plus, SignOut, SortAscending, Trash, Warning, X } from "phosphor-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import constants from "../constants";
+import constants from "../constant";
 
 function ToDo() {
     const [isFormShown, setIsFormShown] = useState(false);
@@ -304,9 +304,9 @@ function ToDo() {
                 <div className="w-full bg-white flex-1  rounded p-6 space-y-6">
                     <div className="flex items-center justify-between text-2xl">
                         <h2 className=" font-light text-gray-800 flex items-center gap-2 py-2 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
-                            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={sortByIncomplete}>
-                                <SortAscending />
-                            </button>
+                        <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={sortByIncomplete}>
+                            <SortAscending />
+                        </button>
                     </div>
                     {tasks.length === 0 && (
                         <p className="text-gray-500 w-full text-center mt-16 flex items-center justify-center flex-col gap-2">
