@@ -97,7 +97,7 @@ export default function HederBar({ setTasks }) {
                                 <div className="absolute top-10 right-0 bg-white hover:bg-red-50 p-2 shadow-lg z-10 border border-gray-300">
                                     <button onClick={logOut} className="w-full px-4 py-2.5 flex items-center gap-2   text-left transition-colors duration-150">
                                         <SignOut className="text-gray-600 h-5 w-5" />
-                                        <span className="text-gray-700 text-sm font-medium">Sign out</span>
+                                        <span className="text-gray-700 text-sm font-medium text-nowrap">Sign out</span>
                                     </button>
                                 </div>
                             </>
