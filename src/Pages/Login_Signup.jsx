@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/ContextProvider";
 import { Spinner, X } from "phosphor-react";
-import constants from "../constant";
+import constants from "../../constant";
 
 
 const serverUrl = constants.serverUrl
