@@ -13,6 +13,7 @@ import TodoPage from "./Pages/TodoPage";
 import todoService from "../Services/todoService";
 import TaskContext from "../Context/taskContext";
 import SplashLoadingPage from "./components/SplashLoadingPage";
+import userService from "../Services/userServices";
 
 export default function App() {
     const token = localStorage.getItem("token");
@@ -21,7 +22,18 @@ export default function App() {
 
 
     useEffect(() => {
+        async function validateUser() {
+            let user = await userService.isValidUser(uid, token);
+            if (!user) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("uid");
+                window.location.href = "/login";
+            }
+
+        }
+
         const fetchTasks = async () => {
+
             try {
                 const response = await todoService.fetchTodos()
                 const tasks = response.data;
@@ -37,6 +49,7 @@ export default function App() {
                 console.error("Failed to fetch tasks:", error);
             }
         };
+        validateUser();
         fetchTasks();
     }, [])
 
