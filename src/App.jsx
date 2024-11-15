@@ -6,14 +6,14 @@ import Lenis from "@studio-freight/lenis";
 import HomePage from "./Pages/HomePage";
 import Login_Signup from "./Pages/Login_Signup";
 import Header from "./components/Header";
-import axios from "axios"; 
+import axios from "axios";
 import TodoPage from "./Pages/TodoPage";
 import todoService from "../Services/todoService";
 import TaskContext from "../Context/taskContext";
 import SplashLoadingPage from "./components/SplashLoadingPage";
-import userService from "../Services/userServices"; 
-import UserContext from "../Context/userContext";
-import SocialPage from "./Pages/SocialPage";
+import userService from "../Services/userServices";
+import UserContext from "../Context/userContext"; 
+import SocialPage from "./Pages/socal/SocialPage";
 
 export default function App() {
     let [isvalidUser, setIsValidUser] = useState(true)
@@ -66,14 +66,14 @@ export default function App() {
         <div>
             <div>
                 {tasks ? <TaskContext.Provider value={{ tasks, setTasks }}>
-                    <UserContext.Provider value={{currentUser}}>
+                    <UserContext.Provider value={{ currentUser }}>
                         <BrowserRouter>
                             <Routes>
                                 <Route path="/" element={isvalidUser ? <HomePage></HomePage> : <Navigate to="/auth" />} >
                                     <Route index element={<TodoPage />} />
                                     <Route path="/social" element={<SocialPage />} />
                                 </Route>
-                                <Route path="/auth" element={<Login_Signup />} />
+                                <Route path="/auth" element={!isvalidUser ? <Login_Signup></Login_Signup> : <Navigate to="/" />} />
                             </Routes>
                         </BrowserRouter>
                     </UserContext.Provider>

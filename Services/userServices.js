@@ -5,9 +5,7 @@ const userService = {}
 const serverUrl = constant.serverUrl
 
 userService.getCurrentUser = async (uid) => { 
-    if (!uid) {
-        throw new Error("User ID is required");
-    }
+    
     try {
         const response = await axios.get(`${serverUrl}/api/u/user`, { headers: { uid: uid } }); 
         return response.data;    } catch (error) {
