@@ -4,31 +4,39 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Lenis from "@studio-freight/lenis";
 
 import HomePage from "./Pages/HomePage";
-import Login_Signup from "./Pages/Login_Signup"; 
+import Login_Signup from "./Pages/Login_Signup";
 import Header from "./components/Header";
-import axios from "axios";
-import ProfilePage from "./Pages/ProfilePage";
+import axios from "axios"; 
 import TodoPage from "./Pages/TodoPage";
 import todoService from "../Services/todoService";
 import TaskContext from "../Context/taskContext";
 import SplashLoadingPage from "./components/SplashLoadingPage";
-import userService from "../Services/userServices";
+import userService from "../Services/userServices"; 
+import UserContext from "../Context/userContext";
+import SocialPage from "./Pages/SocialPage";
 
 export default function App() {
-    let [isvalidUser ,setIsValidUser] = useState(true) 
+    let [isvalidUser, setIsValidUser] = useState(true)
     const [tasks, setTasks] = useState(null);
+    const [currentUser, setCurrentUser] = useState()
 
 
     useEffect(() => {
+        const getCurrentUser = async () => {
+            const uid = localStorage.getItem('uid')
+            const user = await userService.getCurrentUser(uid)
+            setCurrentUser(user)
+
+        }
         const validateUser = async () => {
             let uid = localStorage.getItem('uid')
             let token = localStorage.getItem('token')
             if (uid && token) {
                 const isvalid = await userService.isValidUser(uid, token)
-                if(!isvalid){
+                if (!isvalid) {
                     setIsValidUser(isvalid)
-                } 
-            }else{
+                }
+            } else {
                 setIsValidUser(false)
             }
         }
@@ -49,6 +57,7 @@ export default function App() {
                 console.error("Failed to fetch tasks:", error);
             }
         };
+        getCurrentUser()
         validateUser()
         fetchTasks();
     }, [])
@@ -57,15 +66,17 @@ export default function App() {
         <div>
             <div>
                 {tasks ? <TaskContext.Provider value={{ tasks, setTasks }}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={isvalidUser ? <HomePage></HomePage> : <Navigate to="/auth" />} >
-                                <Route index element={<TodoPage />} />
-                                <Route path="/profile" element={<ProfilePage />} />
-                            </Route>
-                            <Route path="/auth" element={<Login_Signup />} />
-                        </Routes>
-                    </BrowserRouter>
+                    <UserContext.Provider value={{currentUser}}>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={isvalidUser ? <HomePage></HomePage> : <Navigate to="/auth" />} >
+                                    <Route index element={<TodoPage />} />
+                                    <Route path="/social" element={<SocialPage />} />
+                                </Route>
+                                <Route path="/auth" element={<Login_Signup />} />
+                            </Routes>
+                        </BrowserRouter>
+                    </UserContext.Provider>
                 </TaskContext.Provider> : <SplashLoadingPage />}
 
             </div>

@@ -1,26 +1,24 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ArrowClockwise, HouseSimple, MagnifyingGlass, Plus, SignOut, UserCircle } from "phosphor-react";
 import userService from "../../Services/userServices";
 import { Link } from "react-router-dom";
 import TodoForm from "./Tasks/TodoForm";
 import PopUpMessage from "./popUpMessage";
+import UserContext from "../../Context/userContext";
 
 export default function HederBar({ setTasks }) {
+    const [user, setUser] = useState(null);
     const uid = localStorage.getItem("uid");
     const [isFormShown, setIsFormShown] = useState(false)
-
-
-
     const [message, setMessage] = useState('');
 
-    const [user, setUser] = useState(null);
+    const { currentUser } = useContext(UserContext)
+    
     useEffect(() => {
-        const uid = localStorage.getItem("uid");
-        userService.getCurrentUser(uid).then((currentUser) => {
-            setUser(currentUser);
-        })
+      setUser(currentUser)
+    },[])
 
-    }, []);
+
 
     const logOut = () => {
         userService.logOut();
@@ -32,7 +30,7 @@ export default function HederBar({ setTasks }) {
             }
             {user && (
                 <div className=" text-lg  text-center  flex w-full justify-between items-center px-6 py-4 sticky top-0 bg-white shadow-md ">
-                    <Link to='/profile' className="flex  items-center gap-3">
+                    <Link to='/social' className="flex  items-center gap-3">
                         <UserCircle size={24}> </UserCircle>
                         <p>Hi! {user.name}!</p>
 
@@ -40,7 +38,7 @@ export default function HederBar({ setTasks }) {
                     <div className="  ">
                         <button className="p-3  hover:bg-slate-600 hover:text-white " >
                             <Link to={'/'}> <HouseSimple /></Link>
-                        </button> 
+                        </button>
                         <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { window.location.reload() }} >
                             <ArrowClockwise />
                         </button>
@@ -54,7 +52,7 @@ export default function HederBar({ setTasks }) {
                     </div>
                 </div>
             )}
-            
+
 
         </div>
 
