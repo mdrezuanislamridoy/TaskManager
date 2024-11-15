@@ -1,8 +1,8 @@
 
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
-import userService from "../../Services/userServices";
-import UserContext from "../../Context/userContext";
+import userService from "../../../Services/userServices";
+import UserContext from "../../../Context/userContext";
 
 
 const CoverPicture = ({ url }) => {
@@ -12,11 +12,11 @@ const CoverPicture = ({ url }) => {
         </div>
     )
 }
-const Avater = ({ url, className }) => {
+export const Avater = ({ url, className }) => {
     return (
         <div className={className + " relative   md:-mt-0 z-10"} >
             <img src={url} alt="Profile"
-                className={" w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"} />
+                className={" w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"} />
         </div>
     )
 }

@@ -12,8 +12,8 @@ import todoService from "../Services/todoService";
 import TaskContext from "../Context/taskContext";
 import SplashLoadingPage from "./components/SplashLoadingPage";
 import userService from "../Services/userServices";
-import UserContext from "../Context/userContext";
-import SocialPage from "./Pages/SocialPage";
+import UserContext from "../Context/userContext"; 
+import SocialPage from "./Pages/socal/SocialPage";
 
 export default function App() {
     let [isvalidUser, setIsValidUser] = useState(true)
