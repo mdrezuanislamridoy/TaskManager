@@ -24,16 +24,9 @@ userService.logOut = async () => {
 };
  
 userService.isValidUser = async (uid, token) => {
-    let userID = uid
-    let userToken = token
 
-    //get currentuser
-    let user = await userService.getCurrentUser(userID);
-    if (user.token !== userToken) {
-        console.log(user.token, userToken);
-        return false
-    }
-    return true
+    const user = await userService.getCurrentUser(uid)
+    return user.token == token
 }
 
 export default userService;

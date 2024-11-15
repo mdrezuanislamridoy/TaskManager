@@ -16,22 +16,20 @@ import SplashLoadingPage from "./components/SplashLoadingPage";
 import userService from "../Services/userServices";
 
 export default function App() {
-    const token = localStorage.getItem("token");
-    const uid = localStorage.getItem("uid");
+    let [isvalidUser ,setIsValidUser] = useState(true) 
     const [tasks, setTasks] = useState(null);
 
 
     useEffect(() => {
-        async function validateUser() {
-            let user = await userService.isValidUser(uid, token);
-            if (!user) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("uid");
-                window.location.href = "/login";
-            }
+        const validateUser = async () => {
+            let uid = localStorage.getItem('uid')
+            let token = localStorage.getItem('token')
 
+            const isvalid = await userService.isValidUser(uid, token)
+            if(!isvalid){
+                setIsValidUser(isvalid)
+            } 
         }
-
         const fetchTasks = async () => {
 
             try {
@@ -49,7 +47,7 @@ export default function App() {
                 console.error("Failed to fetch tasks:", error);
             }
         };
-        validateUser();
+        validateUser()
         fetchTasks();
     }, [])
 
@@ -59,7 +57,7 @@ export default function App() {
                 {tasks ? <TaskContext.Provider value={{ tasks, setTasks }}>
                     <BrowserRouter>
                         <Routes>
-                            <Route path="/" element={token ? <HomePage></HomePage> : <Navigate to="/auth" />} >
+                            <Route path="/" element={isvalidUser ? <HomePage></HomePage> : <Navigate to="/auth" />} >
                                 <Route index element={<TodoPage />} />
                                 <Route path="/profile" element={<ProfilePage />} />
                             </Route>
