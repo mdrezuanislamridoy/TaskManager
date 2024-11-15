@@ -3,6 +3,6 @@
 
 
 const constants = {
-    serverUrl: 'http://localhost:3009',
+    serverUrl: 'https://taskmanager-server-production.up.railway.app',
 };
 export default constants;
