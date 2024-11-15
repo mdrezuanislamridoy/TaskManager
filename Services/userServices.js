@@ -22,5 +22,11 @@ userService.logOut = async () => {
     localStorage.removeItem("uid");
     window.location.reload();
 };
+ 
+userService.isValidUser = async (uid, token) => {
+
+    const user = await userService.getCurrentUser(uid)
+    return user.token == token
+}
 
 export default userService;
