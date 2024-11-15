@@ -14,6 +14,7 @@ import SplashLoadingPage from "./components/SplashLoadingPage";
 import userService from "../Services/userServices";
 import UserContext from "../Context/userContext"; 
 import SocialPage from "./Pages/socal/SocialPage";
+import NotFound from "./Pages/NotFound";
 
 export default function App() {
     let [isvalidUser, setIsValidUser] = useState(true)
@@ -74,6 +75,7 @@ export default function App() {
                                     <Route path="/social" element={<SocialPage />} />
                                 </Route>
                                 <Route path="/auth" element={!isvalidUser ? <Login_Signup></Login_Signup> : <Navigate to="/" />} />
+                                <Route path="*" element={<NotFound />} />
                             </Routes>
                         </BrowserRouter>
                     </UserContext.Provider>
