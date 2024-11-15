@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import ToDo from "../components/todo-old-deprecated";
+import { useEffect, useState } from "react"; 
 import { ArrowClockwise, MagnifyingGlass, Plus, SignOut, UserCircle } from "phosphor-react";
 import userService from "../../Services/userServices";
 import HederBar from "../components/Header";
@@ -7,7 +6,6 @@ import { Outlet } from "react-router-dom";
 
 export default function HomePage() {
     const uid = localStorage.getItem("uid");
-    const [isFormShown, setIsFormShown] = useState(false)
 
     const [user, setUser] = useState(null);
     useEffect(() => {
@@ -20,8 +18,8 @@ export default function HomePage() {
 
     
     return (
-        <>
-            <div className="border-b ">
+        <div className="flex flex-col h-screen overflow-auto">
+            <div className="border-b  ">
                 <div className="w-full flex justify-between items-center overflow-x-auto snap-x snap-mandatory scroll-smooth">
                     <img className="w-full block aspect-[16/8] snap-center" src="https://th.bing.com/th/id/OIP.CI71_QZJRHYc_PxnbMGmJAHaDG?rs=1&pid=ImgDetMain" alt="" />
                     <img className="w-full block aspect-[16/8] snap-center" src="https://cdn.wallpapersafari.com/19/81/jdOZBL.jpg" alt="" />
@@ -34,8 +32,8 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <HederBar setIsFormShown={setIsFormShown} isFormShown={isFormShown} />
+            <HederBar />
             <Outlet />
-        </>
+        </div>
     )
 }

@@ -1,14 +1,11 @@
-import { useContext, useState } from "react";
-import TaskBody from "./TaskBody";
-import { Check, PencilSimple, Trash } from "phosphor-react";
-import TaskEditor from "./TaskEditor";
-import PopUpMessage from "../popUpMessage";
+import { useContext, useState } from "react"; 
+import { Calendar, Check, PencilSimple, Trash } from "phosphor-react"; 
 import todoService from "../../../Services/todoService";
 import TaskContext from "../../../Context/taskContext";
 
 
 
-const TaskCard = ({ task ,setMessage}) => {
+const TaskCard = ({ task, setMessage }) => {
 
     const { tasks, setTasks } = useContext(TaskContext)
     // Editing state
@@ -16,7 +13,7 @@ const TaskCard = ({ task ,setMessage}) => {
     const [editTaskId, setEditTaskId] = useState();
     const [singleTaskTitle, setSingleTaskTitle] = useState("");
     const [singleTaskDescription, setSingleTaskDescription] = useState("");
- 
+
 
     const handleCheckboxChange = async (taskId, currentStatus) => {
         try {
@@ -92,14 +89,31 @@ const TaskCard = ({ task ,setMessage}) => {
             <div className="flex items-center w-full gap-4">
                 <div className="flex-1">
                     {editTaskId === task._id && isEditMode ? (
-                        <TaskEditor
-                            singleTaskTitle={singleTaskTitle}
-                            singleTaskDescription={singleTaskDescription}
-                            setSingleTaskTitle={setSingleTaskTitle}
-                            setSingleTaskDescription={setSingleTaskDescription}
-                        ></TaskEditor>
+                        <div className="space-y-2">
+                            <h3 className={`text-lg font-semibold ${task.completed ? "line-through text-gray-400" : "text-gray-800"}`}>
+                                {task.title}
+                            </h3>
+                            <div className="flex items-center text-sm text-gray-500 border-b border-gray-100 pb-2">
+                                <Calendar className="w-4 h-4 mr-1" />
+                                {new Date(task.date).toLocaleDateString()}
+                            </div>
+                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all duration-100 cursor-pointer whitespace-pre-wrap">
+                                {task.description}
+                            </p>
+                        </div>
                     ) : (
-                        <TaskBody task={task} />
+                        <div className="space-y-2">
+                            <h3 className={`text-lg font-semibold ${task.completed ? "line-through text-gray-400" : "text-gray-800"}`}>
+                                {task.title}
+                            </h3>
+                            <div className="flex items-center text-sm text-gray-500 border-b border-gray-100 pb-2">
+                                <Calendar className="w-4 h-4 mr-1" />
+                                {new Date(task.date).toLocaleDateString()}
+                            </div>
+                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all duration-100 cursor-pointer whitespace-pre-wrap">
+                                {task.description}
+                            </p>
+                        </div>
                     )}
                 </div>
 
