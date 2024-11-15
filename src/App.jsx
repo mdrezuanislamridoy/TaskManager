@@ -24,11 +24,14 @@ export default function App() {
         const validateUser = async () => {
             let uid = localStorage.getItem('uid')
             let token = localStorage.getItem('token')
-
-            const isvalid = await userService.isValidUser(uid, token)
-            if(!isvalid){
-                setIsValidUser(isvalid)
-            } 
+            if (uid && token) {
+                const isvalid = await userService.isValidUser(uid, token)
+                if(!isvalid){
+                    setIsValidUser(isvalid)
+                } 
+            }else{
+                setIsValidUser(false)
+            }
         }
         const fetchTasks = async () => {
 
