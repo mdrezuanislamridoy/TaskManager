@@ -4,12 +4,13 @@ import constant from "../constant"
 const userService = {}
 const serverUrl = constant.serverUrl
 
-
-userService.getCurrentUser = async (uid) => {
+userService.getCurrentUser = async (uid) => { 
+    if (!uid) {
+        throw new Error("User ID is required");
+    }
     try {
-        const response = await axios.get(`${serverUrl}/api/u/user/${uid}`);
-        return response.data;
-    } catch (error) {
+        const response = await axios.get(`${serverUrl}/api/u/user`, { headers: { uid: uid } }); 
+        return response.data;    } catch (error) {
         console.error("Failed to get user:", error);
         throw error;
     }
@@ -17,6 +18,9 @@ userService.getCurrentUser = async (uid) => {
 
 userService.logOut = async () => {
     const uid = localStorage.getItem("uid");
+    if (!uid) {
+        throw new Error("No user ID found in localStorage");
+    }
     let res = await axios.post(serverUrl + "/api/user/logout", { headers: { uid } });
     localStorage.removeItem("token");
     localStorage.removeItem("uid");
@@ -24,9 +28,10 @@ userService.logOut = async () => {
 };
  
 userService.isValidUser = async (uid, token) => {
-
-    const user = await userService.getCurrentUser(uid)
+    if (!uid || !token) {
+        throw new Error("User ID and token are required");
+    }
+    const user = await userService.getCurrentUser(uid) 
     return user.token == token
 }
-
 export default userService;
