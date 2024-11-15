@@ -3,10 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/ContextProvider";
 import { Spinner, X } from "phosphor-react";
-import constants from "../constants";
+import constants from "../../constant";
 
 
-const serverUrl = constants.serverUrl 
+const serverUrl = constants.serverUrl
 
 export default function LoginSignup() {
     const [isSignup, setIsSignup] = useState(false);
