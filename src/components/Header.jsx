@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { ArrowClockwise, ChatDots, DotsNine, DotsThree, DotsThreeCircle, DotsThreeVertical, Hamburger, HouseSimple, LinkSimpleHorizontal, MagnifyingGlass, PencilSimpleLine, Plus, SignOut, UserCircle } from "phosphor-react";
+import { ArrowClockwise, ChatDots, DotsNine, DotsThree, DotsThreeCircle, DotsThreeVertical, Hamburger, HouseSimple, LinkSimpleHorizontal, MagnifyingGlass, PencilSimpleLine, Plus, SignOut, User, UserCircle, Users } from "phosphor-react";
 import userService from "../../Services/userServices";
 import { Link } from "react-router-dom";
 import TodoForm from "./Tasks/TodoForm";
@@ -13,7 +13,7 @@ const SidePanel = ({isOpen ,  sidePanelController, userData }) => {
             <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onClick={() => sidePanelController(false)}></div>
             <div className="flex flex-col w-[70%] max-w-xs bg-white shadow-2xl h-full p-6 z-[9999] transform transition-transform duration-300 ease-in-out">
                 <Link to='/social' onClick={() => sidePanelController(false)}>
-                    <div className="flex flex-col items-center pb-6 mb-6 border-b border-gray-200">
+                    <div className="flex flex-col items-center pb-6 mb-6 border-b border-gray-200  ">
                         <Avater url='https://avatars.githubusercontent.com/u/106436211?v=4' className='mb-4  ' > </Avater>
                         <h3 className="text-lg font-semibold text-gray-800">{userData.name}</h3>
                         <p className="text-sm text-gray-500">{userData.email}</p>
@@ -21,23 +21,27 @@ const SidePanel = ({isOpen ,  sidePanelController, userData }) => {
                 </Link>
 
                 <nav className="space-y-3">
-                    <Link to="/" className="flex hover:scale-95 transition-all duration-100 items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
-                        <HouseSimple weight="bold" size={20} />
-                        <span className="text-[16px] font-medium">Home</span>
+                    <Link to="/profile" className="flex hover:scale-95  items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
+                        <User weight="bold" size={20} />
+                        <span className="text-[16px] font-medium">Profile</span>
                     </Link>
-                    <Link to="/" className="flex hover:scale-95 transition-all duration-100 items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
+                    <Link to="/social" className="flex hover:scale-95  items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
+                        <Users weight="bold" size={20} />
+                        <span className="text-[16px] font-medium">Friends</span>
+                    </Link>
+                    <Link to="/" className="flex hover:scale-95  items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
                         <DotsThree weight="bold" size={20} />
                         <span className="text-[16px] font-medium">Tasks</span>
                     </Link>
-                    <Link to="/notes" className="flex hover:scale-95 transition-all duration-100 items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
+                    <Link to="/" className="flex hover:scale-95  items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
                         <PencilSimpleLine weight="bold" size={20} />
                         <span className="text-[16px] font-medium">Notes</span>
                     </Link>
-                    <Link to="/calendar" className="flex hover:scale-95 transition-all duration-100 items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
+                    <Link to="/calendar" className="flex hover:scale-95  items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
                         <DotsThreeCircle weight="bold" size={20} />
                         <span className="text-[16px] font-medium">Calendar</span>
                     </Link>
-                    <Link to="/contacts" className="flex hover:scale-95 transition-all duration-100 items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
+                    <Link to="/contacts" className="flex hover:scale-95  items-center gap-4 text-xl text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg p-2 transition-all duration-200">
                         <ChatDots weight="bold" size={20} />
                         <span className="text-[16px] font-medium">Contacts</span>
                     </Link>
@@ -73,8 +77,8 @@ export default function HederBar({ setTasks }) {
             {user && (
                 <div className=" text-lg  text-center  flex w-full justify-between items-center px-6 py-4 sticky top-0 bg-white shadow-md ">
 
-                    <button className=" flex gap-2 items-center " onClick={() => setIsSidePanelOpen(true)} >
-                        <DotsNine ></DotsNine>  <span> Task App </span>
+                    <button className=" flex gap-2 items-center hover:scale-95 transition-all duration-100" onClick={() => setIsSidePanelOpen(true)} >
+                        <DotsNine/> <span>Hi! {user.name}</span>                    
                     </button>
 
                     {isSidePanelOpen && <SidePanel isOpen={isSidePanelOpen} sidePanelController={setIsSidePanelOpen} userData={currentUser} ></SidePanel>}
@@ -95,11 +99,11 @@ export default function HederBar({ setTasks }) {
 
                         {isDropDownOpen && (
                             <>
-                                <div className="fixed inset-0 " onClick={() => setIsDropDownOpen(false)}></div>
-                                <div className="absolute top-10 right-0 bg-white hover:bg-red-50 p-2 shadow-lg z-10 border border-gray-300">
-                                    <button onClick={logOut} className="w-full px-4 py-2.5 flex items-center gap-2   text-left transition-colors duration-150">
-                                        <SignOut className="text-gray-600 h-5 w-5" />
-                                        <span className="text-gray-700 text-sm font-medium text-nowrap">Sign out</span>
+                                <div className="fixed inset-0" onClick={() => setIsDropDownOpen(false)}></div>
+                                <div className="absolute top-12 right-0 bg-white rounded-lg shadow-xl p-3 z-10 border-t">
+                                    <button onClick={logOut} className="w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-50 rounded-md transition-colors">
+                                        <SignOut className="text-gray-500 h-5 w-5" />
+                                        <span className="text-gray-700 text-sm text-nowrap">Sign out</span>
                                     </button>
                                 </div>
                             </>

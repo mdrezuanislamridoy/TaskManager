@@ -10,14 +10,14 @@ export default function HomePage() {
     const [user, setUser] = useState(null);
     useEffect(() => {
         const uid = localStorage.getItem("uid");
-        userService.getCurrentUser(uid).then((currentUser) => {
+        userService.getUser(uid).then((currentUser) => {
             setUser(currentUser);
         })
 
     }, []);
 
     const location = useLocation();
-    const showImageSlider = !location.pathname.includes('/social');
+    const showImageSlider = !location.pathname.includes('/profile') && !location.pathname.includes('/social');
     
     return (
         <div className="flex flex-col h-screen overflow-auto">

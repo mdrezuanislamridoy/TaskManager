@@ -6,26 +6,21 @@ import UserContext from "../../../Context/userContext";
 
 
 
-const FriendPage = () => {
-
+const AllUser = () => {
     const { currentUser } = useContext(UserContext);
     const [friendsData, setFriendsData] = useState([]);
 
-    useEffect(() => {
-        const loadFriendsData = async () => {
-            if (currentUser?.friends) {
-                const friends = currentUser.friends;
-                const friendsData = await userService.getUserFromUidList(friends);
-                setFriendsData(friendsData);
-            }
+    useEffect(() => {  
+        const loadAllUsers = async () => {
+            const allUsers = await userService.getAllUser(currentUser._id);
+            setFriendsData(allUsers);
         };
-        
-        loadFriendsData();
+        loadAllUsers();
     }, [currentUser]);
     return <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-1/4 md:pr-4">
             <div className="bg-white shadow-lg rounded-lg min-h-screen">
-                
+                 
                 <div className="p-6 pt-4">
                     <h3 className="text-lg font-semibold">Friends</h3>
                     <ul className="mt-2">
@@ -51,4 +46,4 @@ const FriendPage = () => {
     </div>
 }
 
-export default FriendPage
+export default AllUser
