@@ -1,20 +1,19 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Lenis from "@studio-freight/lenis";
-
 import HomePage from "./Pages/HomePage";
 import Login_Signup from "./Pages/Login_Signup";
-import Header from "./components/Header";
-import axios from "axios";
 import TodoPage from "./Pages/TodoPage";
 import todoService from "../Services/todoService";
 import TaskContext from "../Context/taskContext";
 import SplashLoadingPage from "./components/SplashLoadingPage";
 import userService from "../Services/userServices";
-import UserContext from "../Context/userContext"; 
+import UserContext from "../Context/userContext";
 import SocialPage from "./Pages/socal/SocialPage";
 import NotFound from "./Pages/NotFound";
+import PeoplePage from "./Pages/socal/PeoplePage";
+import AllUser from "./Pages/socal/AllUser";
+import FriendPage from "./Pages/socal/Friends";
 
 export default function App() {
     let [isvalidUser, setIsValidUser] = useState(true)
@@ -25,7 +24,7 @@ export default function App() {
     useEffect(() => {
         const getCurrentUser = async () => {
             const uid = localStorage.getItem('uid')
-            const user = await userService.getCurrentUser(uid)
+            const user = await userService.getUser(uid)
             setCurrentUser(user)
 
         }
@@ -42,7 +41,6 @@ export default function App() {
             }
         }
         const fetchTasks = async () => {
-
             try {
                 const response = await todoService.fetchTodos()
                 const tasks = response.data;
@@ -72,7 +70,13 @@ export default function App() {
                             <Routes>
                                 <Route path="/" element={isvalidUser ? <HomePage></HomePage> : <Navigate to="/auth" />} >
                                     <Route index element={<TodoPage />} />
-                                    <Route path="/social" element={<SocialPage />} />
+                                    <Route path="/profile" element={<SocialPage />}/>
+                                    <Route path="/social" element={<PeoplePage />}>
+                                        <Route index element={<Navigate to="/social/alluser" />} />
+                                        <Route path="/social/alluser" element={<AllUser />} />
+                                        <Route path="/social/allFriends" element={<FriendPage></FriendPage>} />
+                                    </Route>
+
                                 </Route>
                                 <Route path="/auth" element={!isvalidUser ? <Login_Signup></Login_Signup> : <Navigate to="/" />} />
                                 <Route path="*" element={<NotFound />} />

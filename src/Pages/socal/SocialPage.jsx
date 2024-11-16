@@ -1,8 +1,8 @@
 
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
-import userService from "../../../Services/userServices";
 import UserContext from "../../../Context/userContext";
+import userService from "../../../Services/userServices";
 
 
 const CoverPicture = ({ url }) => {
@@ -42,8 +42,21 @@ const AboutUser = ({ userData }) => {
 const SocialPage = () => {
     const { uid } = useParams();
     const { currentUser } = useContext(UserContext);
+    const [friendsData, setFriendsData] = useState([]);
+
     console.log(currentUser);
 
+    useEffect(() => {
+        const loadFriendsData = async () => {
+            if (currentUser?.friends) {
+                const friendsDetails = await Promise.all(
+                    currentUser.friends.map(friendUid => userService.getUser(friendUid))
+                );
+                setFriendsData(friendsDetails);
+            }
+        };
+        loadFriendsData();
+    }, [currentUser]);
 
     return (
 
@@ -61,6 +74,19 @@ const SocialPage = () => {
                             <p className="text-gray-600 leading-relaxed">
                                 Welcome to my profile! I'm passionate about technology and innovation.
                             </p>
+                        </div>
+                        <div className="mt-8 border-t border-gray-200 pt-8">
+                            <h3 className="text-xl font-semibold text-gray-900 mb-4">Friends</h3>
+                            <div className="flex items-center">
+                                {friendsData.map((friend, index) => (
+                                    <div key={index} className="flex flex-col items-center">
+                                        <img src={friend.photoURL || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"}
+                                            alt={friend.name}
+                                            className="w-20 h-20 rounded-full object-cover" />
+                                        <p className="mt-2 text-sm font-medium text-gray-900">{friend.name}</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
