@@ -16,8 +16,7 @@ userService.getUser = async (uid) => {
 };
 
 userService.getAllUser = async (uid) => {
-    try { 
-        await console.log(uid);
+    try {  
         const response = await axios.get(`${serverUrl}/api/friends/`, { headers: { uid: uid } });
         return response.data;
     } catch (error) {

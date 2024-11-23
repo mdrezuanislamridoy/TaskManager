@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import userService from "../../../Services/userServices";
 import UserContext from "../../../Context/userContext";
+import friendService from "../../../Services/FriendService";
 
 
 
@@ -13,11 +14,8 @@ const FriendPage = () => {
 
     useEffect(() => {
         const loadFriendsData = async () => {
-            if (currentUser?.friends) {
-                const friends = currentUser.friends;
-                const friendsData = await userService.getUserFromUidList(friends);
-                setFriendsData(friendsData);
-            }
+            let friends = await friendService.getFriends(currentUser._id)
+            setFriendsData(friends);
         };
         
         loadFriendsData();
