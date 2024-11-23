@@ -61,10 +61,11 @@ export default function HederBar({ setTasks }) {
     const { currentUser } = useContext(UserContext)
 
     useEffect(() => {
-        setUser(currentUser)
-    }, [])
-
-
+        const fetchUser = () => {
+            setUser(currentUser);
+        };
+        fetchUser();
+    }, [currentUser]); // Added currentUser as a dependency to ensure it updates correctly
 
     const logOut = () => {
         userService.logOut();
@@ -74,8 +75,7 @@ export default function HederBar({ setTasks }) {
             {
                 message && <PopUpMessage message={message} setMessage={setMessage}></PopUpMessage>
             }
-            {user && (
-                <div className=" text-lg  text-center  flex w-full justify-between items-center px-6 py-4 sticky top-0 bg-white shadow-md ">
+            {user && (                <div className=" text-lg  text-center  flex w-full justify-between items-center px-6 py-4 sticky top-0 bg-white shadow-md ">
 
                     <button className=" flex gap-2 items-center hover:scale-95 transition-all duration-100" onClick={() => setIsSidePanelOpen(true)} >
                         <DotsNine/> <span>Hi! {user.name}</span>                    
