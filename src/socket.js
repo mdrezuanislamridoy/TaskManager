@@ -4,7 +4,7 @@
 import { io } from "socket.io-client";
 
 
-const socket = io('http://localhost:3009')
+const socket = io("https://taskmanager-server-production.up.railway.app")
 
 export const initSocket = () => {
     socket.on('connect', () => {
