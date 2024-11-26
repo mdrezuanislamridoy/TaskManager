@@ -1,8 +1,7 @@
 import axios from "axios";
-import constant from "../constant"
-
+import constants from "../constant";
 const userService = {}
-const serverUrl = constant.serverUrl
+const serverUrl = constants.serverUrl
 
 userService.getUser = async (uid) => {
 

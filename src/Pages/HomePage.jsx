@@ -17,14 +17,14 @@ export default function HomePage() {
     }, []);
 
     const location = useLocation();
-    const showImageSlider = !location.pathname.includes('/profile') && !location.pathname.includes('/social');
+    const showImageSlider = !location.pathname.includes('/profile') && !location.pathname.includes('/social') && !location.pathname.includes('/chats') && !location.pathname.includes('/message');
     
     return (
         <div className="flex flex-col h-screen overflow-auto">
             <HederBar /> 
             {showImageSlider && (
                 <div className="border-b">
-                    <div className="w-full flex justify-between items-center overflow-x-auto snap-x snap-mandatory scroll-smooth">
+                    <div className="flex items-center justify-between w-full overflow-x-auto snap-x snap-mandatory scroll-smooth">
                         <img className="w-full block aspect-[16/8] snap-center" src="https://th.bing.com/th/id/OIP.CI71_QZJRHYc_PxnbMGmJAHaDG?rs=1&pid=ImgDetMain" alt="" />
                         <img className="w-full block aspect-[16/8] snap-center" src="https://cdn.wallpapersafari.com/19/81/jdOZBL.jpg" alt="" />
                         <img className="w-full block aspect-[16/8] snap-center" src="https://img.freepik.com/premium-photo/mountain-range-with-blue-purple-mountains-background_900396-9646.jpg" alt="" />

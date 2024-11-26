@@ -53,37 +53,37 @@ const AllUser = () => {
     }, [currentUser]);
     return <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-1/4 md:pr-4">
-            <div className="bg-white shadow-lg rounded-lg min-h-screen">
+            <div className="min-h-screen bg-white rounded-lg shadow-lg">
 
                 <div className="p-6 pt-4">
                     <h3 className="text-lg font-semibold">Friends</h3>
                     <ul className="mt-2">
                             {otherUser.map((friend) => (
-                                <li key={friend._id} className="flex items-center border my-4 p-6 py-3 rounded-md">
-                                    <div className="w-12 h-12 rounded-full overflow-hidden">
-                                        <img src={"https://picsum.photos/233"} alt="Friend" className="w-full h-full object-cover" />
+                                <li key={friend._id} className="flex items-center p-6 py-3 my-4 border rounded-md">
+                                    <div className="w-12 h-12 overflow-hidden rounded-full">
+                                        <img src={"https://picsum.photos/233"} alt="Friend" className="object-cover w-full h-full" />
                                     </div>
                                     <div className="ml-4 text-2xl">
                                         <p className="text-gray-600">{friend.name}</p>
                                     </div>
                                     <div className="ml-auto">
                                         {localUserState.friends.includes(friend._id) ? (
-                                            <button className="bg-blue-100 hover:bg-blue-600 text-black font-semibold p-4 rounded">
+                                            <button className="p-4 font-semibold text-black bg-blue-100 rounded hover:bg-blue-600">
                                                 <Chat /> Chat
                                             </button>
                                         ) : localUserState.sentFR.includes(friend._id) ? (
-                                            <button className="bg-green-100 hover:bg-blue-600 text-black font-semibold p-4 rounded"
+                                            <button className="p-4 font-semibold text-black bg-green-100 rounded hover:bg-blue-600"
                                                     onClick={() => cancelFriendReq(friend._id)}
                                             >
-                                                <X /> cansel
+                                                <X /> cancel
                                             </button>
                                         ) : localUserState.pendingFR.includes(friend._id) ? (
-                                            <button className="bg-red-100 hover:bg-red-600 text-black font-semibold p-4 rounded" 
+                                            <button className="p-4 font-semibold text-black bg-red-100 rounded hover:bg-red-600" 
                                                >
                                             <Check /> accept
                                             </button>
                                         ) : (
-                                            <button className="bg-amber-100 hover:bg-amber-600 text-black font-semibold p-4 rounded" 
+                                            <button className="p-4 font-semibold text-black rounded bg-amber-100 hover:bg-amber-600" 
                                                 onClick={() => addFriend(friend._id)}>
                                                 <UserPlus /> Add
                                             </button>

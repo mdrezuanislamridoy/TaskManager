@@ -9,19 +9,31 @@ import TaskContext from "../Context/taskContext";
 import SplashLoadingPage from "./components/SplashLoadingPage";
 import userService from "../Services/userServices";
 import UserContext from "../Context/userContext";
-import SocialPage from "./Pages/socal/SocialPage";
+import SocialPage from "./Pages/social/SocialPage";
 import NotFound from "./Pages/NotFound";
-import PeoplePage from "./Pages/socal/PeoplePage";
-import AllUser from "./Pages/socal/AllUser";
-import FriendPage from "./Pages/socal/Friends";
+import PeoplePage from "./Pages/social/PeoplePage";
+import AllUser from "./Pages/social/AllUser";
+import FriendPage from "./Pages/social/Friends";
+import Chats from "./Pages/Chat/Chats";
+import Inbox from "./Pages/Chat/Inbox";
+import ChatList from "./Pages/Chat/ChatList";
+import { initSocket } from "./socket";
+
 
 export default function App() {
-    let [isvalidUser, setIsValidUser] = useState(true)
+    let [isValidUser, setIsValidUser] = useState(true)
     const [tasks, setTasks] = useState(null);
     const [currentUser, setCurrentUser] = useState()
 
+    initSocket()
+
+
+
 
     useEffect(() => {
+
+
+
         const getCurrentUser = async () => {
             const uid = localStorage.getItem('uid')
             const user = await userService.getUser(uid)
@@ -32,9 +44,9 @@ export default function App() {
             let uid = localStorage.getItem('uid')
             let token = localStorage.getItem('token')
             if (uid && token) {
-                const isvalid = await userService.isValidUser(uid, token)
-                if (!isvalid) {
-                    setIsValidUser(isvalid)
+                const isValid = await userService.isValidUser(uid, token)
+                if (!isValid) {
+                    setIsValidUser(isValid)
                 }
             } else {
                 setIsValidUser(false)
@@ -68,17 +80,23 @@ export default function App() {
                     <UserContext.Provider value={{ currentUser }}>
                         <BrowserRouter>
                             <Routes>
-                                <Route path="/" element={isvalidUser ? <HomePage></HomePage> : <Navigate to="/auth" />} >
+                                <Route path="/" element={isValidUser ? <HomePage></HomePage> : <Navigate to="/auth" />} >
                                     <Route index element={<TodoPage />} />
-                                    <Route path="/profile" element={<SocialPage />}/>
+                                    <Route path="/profile" element={<SocialPage />} />
                                     <Route path="/social" element={<PeoplePage />}>
                                         <Route index element={<Navigate to="/social/alluser" />} />
                                         <Route path="/social/alluser" element={<AllUser />} />
                                         <Route path="/social/allFriends" element={<FriendPage></FriendPage>} />
                                     </Route>
+                                    <Route path="/chats" element={<Chats></Chats>}>
+                                        <Route index element={<Navigate to={'/chats/AllMessage'} />} />
+                                        <Route path="/chats/AllMessage" element={<ChatList></ChatList>}></Route>
+                                        <Route path="/chats/contacts" element={<FriendPage></FriendPage>} />
+                                    </Route>
 
                                 </Route>
-                                <Route path="/auth" element={!isvalidUser ? <Login_Signup></Login_Signup> : <Navigate to="/" />} />
+                                <Route path='/message/:id' element={<Inbox></Inbox>}></Route>
+                                <Route path="/auth" element={!isValidUser ? <Login_Signup></Login_Signup> : <Navigate to="/" />} />
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
                         </BrowserRouter>
