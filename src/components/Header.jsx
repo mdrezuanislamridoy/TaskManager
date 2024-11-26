@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import TodoForm from "./Tasks/TodoForm";
 import PopUpMessage from "./popUpMessage";
 import UserContext from "../../Context/userContext";
-import { Avater } from "../Pages/socal/SocialPage";
+import { Avater } from "../Pages/social/SocialPage";
 
-const SidePanel = ({isOpen ,  sidePanelController, userData }) => {
+const SidePanel = ({ isOpen, sidePanelController, userData }) => {
     return (
         <div className={`fixed inset-0 flex z-[9999] ${isOpen ? 'slide-in' : 'slide-out'}`}>
             <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onClick={() => sidePanelController(false)}></div>
@@ -75,41 +75,41 @@ export default function HederBar({ setTasks }) {
             {
                 message && <PopUpMessage message={message} setMessage={setMessage}></PopUpMessage>
             }
-            {user && (                <div className=" text-lg  text-center  flex w-full justify-between items-center px-6 py-4 sticky top-0 bg-white shadow-md ">
+            {user && (<div className=" text-lg  text-center  flex w-full justify-between items-center px-6 py-4 sticky top-0 bg-white shadow-md ">
 
-                    <button className=" flex gap-2 items-center hover:scale-95 transition-all duration-100" onClick={() => setIsSidePanelOpen(true)} >
-                        <DotsNine/> <span>Hi! {user.name}</span>                    
+                <button className=" flex gap-2 items-center hover:scale-95 transition-all duration-100" onClick={() => setIsSidePanelOpen(true)} >
+                    <DotsNine /> <span>Hi! {user.name}</span>
+                </button>
+
+                {isSidePanelOpen && <SidePanel isOpen={isSidePanelOpen} sidePanelController={setIsSidePanelOpen} userData={currentUser} ></SidePanel>}
+
+
+                <div className=" relative ">
+                    <button className="p-3  hover:bg-slate-600 hover:text-white " >
+                        <Link to={'/'}> <HouseSimple /></Link>
+                    </button>
+                    <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { window.location.reload() }} >
+                        <ArrowClockwise />
+                    </button>
+                    {/* onClick={() => { setIsSearchPageShown(!isSearchPageShown); setIsFormShown(false) }} */}
+
+                    <button onClick={() => { setIsDropDownOpen(!isDropDownOpen) }} className={`p-3  ${isDropDownOpen ? 'bg-slate-200 text-slate-600' : 'hover:bg-slate-600 hover:text-white'}`}>
+                        <DotsThree />
                     </button>
 
-                    {isSidePanelOpen && <SidePanel isOpen={isSidePanelOpen} sidePanelController={setIsSidePanelOpen} userData={currentUser} ></SidePanel>}
-
-
-                    <div className=" relative ">
-                        <button className="p-3  hover:bg-slate-600 hover:text-white " >
-                            <Link to={'/'}> <HouseSimple /></Link>
-                        </button>
-                        <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { window.location.reload() }} >
-                            <ArrowClockwise />
-                        </button>
-                        {/* onClick={() => { setIsSearchPageShown(!isSearchPageShown); setIsFormShown(false) }} */}
-
-                        <button onClick={() => { setIsDropDownOpen(!isDropDownOpen) }} className={`p-3  ${isDropDownOpen ? 'bg-slate-200 text-slate-600' : 'hover:bg-slate-600 hover:text-white'}`}>
-                            <DotsThree />
-                        </button>
-
-                        {isDropDownOpen && (
-                            <>
-                                <div className="fixed inset-0" onClick={() => setIsDropDownOpen(false)}></div>
-                                <div className="absolute top-12 right-0 bg-white rounded-lg shadow-xl p-3 z-10 border-t">
-                                    <button onClick={logOut} className="w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-50 rounded-md transition-colors">
-                                        <SignOut className="text-gray-500 h-5 w-5" />
-                                        <span className="text-gray-700 text-sm text-nowrap">Sign out</span>
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </div>
+                    {isDropDownOpen && (
+                        <>
+                            <div className="fixed inset-0" onClick={() => setIsDropDownOpen(false)}></div>
+                            <div className="absolute top-12 right-0 bg-white rounded-lg shadow-xl p-3 z-10 border-t">
+                                <button onClick={logOut} className="w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-50 rounded-md transition-colors">
+                                    <SignOut className="text-gray-500 h-5 w-5" />
+                                    <span className="text-gray-700 text-sm text-nowrap">Sign out</span>
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </div>
+            </div>
             )}
 
 
