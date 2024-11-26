@@ -14,14 +14,26 @@ import NotFound from "./Pages/NotFound";
 import PeoplePage from "./Pages/social/PeoplePage";
 import AllUser from "./Pages/social/AllUser";
 import FriendPage from "./Pages/social/Friends";
+import Chats from "./Pages/Chat/Chats";
+import Inbox from "./Pages/Chat/Inbox";
+import ChatList from "./Pages/Chat/ChatList";
+import { initSocket } from "./socket";
+
 
 export default function App() {
     let [isValidUser, setIsValidUser] = useState(true)
     const [tasks, setTasks] = useState(null);
     const [currentUser, setCurrentUser] = useState()
 
+    initSocket()
+
+
+
 
     useEffect(() => {
+
+
+
         const getCurrentUser = async () => {
             const uid = localStorage.getItem('uid')
             const user = await userService.getUser(uid)
@@ -76,8 +88,14 @@ export default function App() {
                                         <Route path="/social/alluser" element={<AllUser />} />
                                         <Route path="/social/allFriends" element={<FriendPage></FriendPage>} />
                                     </Route>
+                                    <Route path="/chats" element={<Chats></Chats>}>
+                                        <Route index element={<Navigate to={'/chats/AllMessage'} />} />
+                                        <Route path="/chats/AllMessage" element={<ChatList></ChatList>}></Route>
+                                        <Route path="/chats/contacts" element={<FriendPage></FriendPage>} />
+                                    </Route>
 
                                 </Route>
+                                <Route path='/message/:id' element={<Inbox></Inbox>}></Route>
                                 <Route path="/auth" element={!isValidUser ? <Login_Signup></Login_Signup> : <Navigate to="/" />} />
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
