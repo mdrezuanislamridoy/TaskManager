@@ -20,7 +20,7 @@ export default function ChatList() {
     return (
 
         <div>
-             
+            
             {
                 chats ? chats.map((chat) => {
                     return (
