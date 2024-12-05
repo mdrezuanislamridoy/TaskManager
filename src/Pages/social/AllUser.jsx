@@ -35,6 +35,16 @@ const AllUser = () => {
             }));
         }
     }
+    const acceptFriendReq = async (otherUserUID) => {
+        const res = await friendService.acceptFriend(currentUser._id, otherUserUID);
+        if (res) {
+            setLocalUserState(prev => ({
+                ...prev,
+                pendingFR: prev.pendingFR.filter(id => id !== otherUserUID),
+                friends: [...prev.friends, otherUserUID]
+            }));
+        }
+    }
 
     useEffect(() => {
         setLocalUserState({
@@ -79,6 +89,7 @@ const AllUser = () => {
                                             </button>
                                         ) : localUserState.pendingFR.includes(friend._id) ? (
                                             <button className="p-4 font-semibold text-black bg-red-100 rounded hover:bg-red-600" 
+                                               onClick={()=>acceptFriendReq(friend._id) }
                                                >
                                             <Check /> accept
                                             </button>

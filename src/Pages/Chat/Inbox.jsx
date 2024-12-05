@@ -1,9 +1,10 @@
 import { ArrowLeft, ArrowRight, HouseSimple, Link, PaperPlaneRight, Smiley, UserCircle } from "phosphor-react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import chatService from "../../../Services/chatServices"
 
 import socket from "../../socket"
+import UserContext from "../../../Context/userContext"
 
 export default function Inbox() {
     const navigate = useNavigate()
@@ -11,28 +12,63 @@ export default function Inbox() {
 
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState([])
-
+    const [chat, setChat] = useState(null)
     const [update, setUpdate] = useState(false)
 
+    const {currentUser} = useContext(UserContext) 
+
+    const messagesEndRef = useRef(null); // Ref for the bottom of the message list
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the ref
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+    
     const handleSendMessage = (e) => {
         setUpdate(!update)
         e.preventDefault()
         if (input.trim() === '') {
             alert('Please enter a message')
         } else {
-            socket.emit('message', { input, chatId: id, senderId: localStorage.getItem('uid') })
-            setMessages(prevMessages => [...prevMessages, { message: input, senderId: localStorage.getItem('uid') }])
+            socket.emit('message', { text: input, chatId: id, sender: { _id: localStorage.getItem('uid') , name : currentUser.name }, timestamp: new Date().toLocaleString()  })
+
+            setMessages(prevMessages => [...prevMessages, { text: input, sender: { _id: localStorage.getItem('uid') }, timestamp: new Date().toLocaleString() }])
         }
     }
 
+   
     useEffect(() => {
-        chatService.loadMessages(id).then((messages) => {
-            setMessages(messages)
+        chatService.getChatInfo(id) 
+            .then((chatData) => {
+                console.log(chatData.members);
+                console.log(chatData.members[1].name);
+                setChat(chatData);
+            })
+            .catch((error) => {
+                console.error("Error fetching chat info:", error);
+            });
+        chatService.loadMessages(id)
+        .then((messages) => {
+            setMessages(messages);
+            console.log(`Loaded messages for chat ID ${id}:`, messages);
         })
-        socket.on('feedBackMessage', (message, senderId) => {
-            setMessages(prevMessages => [...prevMessages, { message, senderId }])
+        .catch((err) => {
+            console.error(`Error loading messages for chat ID ${id}:`, err);
+            setMessages([]); // Reset messages in case of failure
+        });
+        
+        socket.on('feedBackMessage', (text, sender) => {
+            console.log(sender);
+            setMessages(prevMessages => [...prevMessages, { text, sender, timestamp: new Date().toLocaleString() }])
         })
         socket.emit('join', id)
+        
+        
     }, [])
 
 
@@ -45,7 +81,12 @@ export default function Inbox() {
                 >
                     <ArrowLeft weight="bold" size={24} />
                 </button>
-                <h1 className="text-xl font-semibold text-[#050505]">{`Public Chat Room - ${id} `}</h1>
+                <h1 className="text-xl font-semibold text-[#050505] text-center">
+                    {chat?.members?.find(member => member._id !== localStorage.getItem('uid'))?.name}
+                    <span className="block text-xs text-gray-500">
+                    {id}
+                    </span>
+                </h1>
                 <button
                     onClick={() => navigate('/')}
                     className="p-2 text-[#050505] hover:bg-[#f0f2f5] rounded-full"
@@ -53,28 +94,33 @@ export default function Inbox() {
                     <HouseSimple weight="bold" size={24} />
                 </button>
             </div>
-            <div className="flex-grow p-4 overflow-y-auto">
-                <div className="flex flex-col space-y-4">
+            <div className="flex-grow p-4 overflow-y-auto " >
+                <div className="flex flex-col space-y-4 overflow-y-auto" >
                     {messages ? messages.map((message, index) => {
                         return (
-                            <div className={`flex items-end w-full ${message.senderId == localStorage.getItem('uid') ? 'justify-end' : 'justify-start'}`} key={index}>
-                                {message.senderId != localStorage.getItem('uid') ? (
-                                    <div className="flex items-end w-2/3 space-x-2">
+                            <div className={`flex items-end w-full ${message.sender._id == localStorage.getItem('uid') ? 'justify-end' : 'justify-start'}`} key={index}>
+                                {message.sender._id != localStorage.getItem('uid') ? (
+                                    <div className="flex items-end space-x-2">
                                         <UserCircle size={32} weight="light" className="flex-shrink-0 text-gray-400" />
-                                        <div className="w-full p-3 text-gray-800 bg-white border border-gray-300 rounded-2xl rounded-bl-md">
-                                            {message.message}
+                                        <div className="flex flex-col space-y-1">
+                                            <span className="ml-2 text-sm text-gray-500">{message.sender.name} • {new Date(message.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                                            <div className="w-full p-3 text-gray-800 bg-white border border-gray-300 shadow-sm rounded-2xl rounded-bl-md">
+                                                {message.text}
+                                            </div>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="flex items-end w-2/3 space-x-2">
-                                        <div className="w-full p-3 text-white bg-gray-800 rounded-2xl rounded-br-md">
-                                            {message.message}
+                                    <div className="flex flex-col items-end space-y-1">
+                                        <span className="mr-2 text-sm text-gray-500">You • {new Date(message.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })} </span>
+                                        <div className="w-full p-3 text-white shadow-sm bg-slate-600 rounded-2xl rounded-br-md">
+                                            {message.text}
                                         </div>
                                     </div>
                                 )}
                             </div>
                         )
                     }) : <p>Loading...</p>}
+                    <div ref={messagesEndRef}></div> 
                 </div>
             </div>
             <div className="p-4 bg-white border-t">

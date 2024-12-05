@@ -38,5 +38,15 @@ friendService.cancelFriend = async (uid, friendUid) => {
         throw error;
     }
 };
+friendService.acceptFriend = async (uid, friendUid) => {
+    try {
+        const response = await axios.post(`${serverUrl}/api/friends/acceptReq`, { id: friendUid }, { headers: { uid } });
+        console.log(response.data.message);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to accept friend:", error);
+        throw error;
+    }
+};
 export default friendService;
 
