@@ -108,7 +108,9 @@ export default function Inbox() {
                                     <div className="flex items-end w-full space-x-2">
                                         <UserCircle size={32} weight="light" className="flex-shrink-0 text-gray-400" />
                                         <div className="flex flex-col space-y-1">
-                                            <span className="ml-2 text-sm text-gray-500">{message.sender.name} • {new Date(message.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                                            {(!messages[index - 1] || new Date(message.timestamp).getTime() - new Date(messages[index - 1].timestamp).getTime() > 30 * 1000) &&
+                                                <span className="ml-2 text-sm text-gray-500">{message.sender.name} • {new Date(message.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                                            }
                                             <div className="p-3 text-gray-800 break-words break-all bg-white border border-gray-300 shadow-sm rounded-2xl rounded-bl-md ">
                                                 {message.text.split(/\s+/).map((word, i) => {
                                                     if (word.match(/^(https?:\/\/|www\.)|^[a-zA-Z0-9]+\.[a-zA-Z]{2,}/)) {
@@ -155,7 +157,9 @@ export default function Inbox() {
                                     </div>
                                 ) : (
                                     <div className="flex flex-col items-end space-y-1">
-                                        <span className="mr-2 text-sm text-gray-500">You • {new Date(message.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })} </span>
+                                        {(!messages[index - 1] || new Date(message.timestamp).getTime() - new Date(messages[index - 1].timestamp).getTime() > 30 * 1000) &&
+                                            <span className="ml-2 text-sm text-gray-500">{message.sender.name} • {new Date(message.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                                        }
                                         <div className="w-full p-3 text-white break-words break-all shadow-sm bg-slate-600 rounded-2xl rounded-br-md">
                                             {message.text.split(/\s+/).map((word, i) => {
                                                 if (word.match(/^(https?:\/\/|www\.)|^[a-zA-Z0-9]+\.[a-zA-Z]{2,}/)) {
@@ -175,7 +179,7 @@ export default function Inbox() {
                                                 {message.text.split(/\s+/).map((word, i) => {
                                                     if (word.match(/^(https?:\/\/|www\.)|^[a-zA-Z0-9]+\.[a-zA-Z]{2,}/)) {
                                                         const url = word.startsWith('http') ? word : `https://${word}`
-                                                        return ( 
+                                                        return (
                                                             <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="block p-4 transition-colors duration-200 hover:bg-gray-50">
                                                                 <div className="flex items-center space-x-4">
                                                                     <div className="flex-shrink-0">
