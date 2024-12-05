@@ -15,9 +15,10 @@ export default function Inbox() {
     const [chat, setChat] = useState(null)
     const [update, setUpdate] = useState(false)
 
-    const {currentUser} = useContext(UserContext) 
+    const { currentUser } = useContext(UserContext)
 
     const messagesEndRef = useRef(null); // Ref for the bottom of the message list
+    const inputRef = useRef(null);
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -28,22 +29,26 @@ export default function Inbox() {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
-    
+
     const handleSendMessage = (e) => {
         setUpdate(!update)
         e.preventDefault()
         if (input.trim() === '') {
             alert('Please enter a message')
         } else {
-            socket.emit('message', { text: input, chatId: id, sender: { _id: localStorage.getItem('uid') , name : currentUser.name }, timestamp: new Date().toLocaleString()  })
-
+            socket.emit('message', { text: input, chatId: id, sender: { _id: localStorage.getItem('uid'), name: currentUser.name }, timestamp: new Date().toLocaleString() })
             setMessages(prevMessages => [...prevMessages, { text: input, sender: { _id: localStorage.getItem('uid') }, timestamp: new Date().toLocaleString() }])
+            if (inputRef.current) {
+                inputRef.current.value = null;
+                inputRef.current.focus();
+                setInput('');
+            }
         }
     }
 
-   
+
     useEffect(() => {
-        chatService.getChatInfo(id) 
+        chatService.getChatInfo(id)
             .then((chatData) => {
                 console.log(chatData.members);
                 console.log(chatData.members[1].name);
@@ -53,22 +58,22 @@ export default function Inbox() {
                 console.error("Error fetching chat info:", error);
             });
         chatService.loadMessages(id)
-        .then((messages) => {
-            setMessages(messages);
-            console.log(`Loaded messages for chat ID ${id}:`, messages);
-        })
-        .catch((err) => {
-            console.error(`Error loading messages for chat ID ${id}:`, err);
-            setMessages([]); // Reset messages in case of failure
-        });
-        
+            .then((messages) => {
+                setMessages(messages);
+                console.log(`Loaded messages for chat ID ${id}:`, messages);
+            })
+            .catch((err) => {
+                console.error(`Error loading messages for chat ID ${id}:`, err);
+                setMessages([]); // Reset messages in case of failure
+            });
+
         socket.on('feedBackMessage', (text, sender) => {
             console.log(sender);
             setMessages(prevMessages => [...prevMessages, { text, sender, timestamp: new Date().toLocaleString() }])
         })
         socket.emit('join', id)
-        
-        
+
+
     }, [])
 
 
@@ -84,7 +89,7 @@ export default function Inbox() {
                 <h1 className="text-xl font-semibold text-[#050505] text-center">
                     {chat?.members?.find(member => member._id !== localStorage.getItem('uid'))?.name}
                     <span className="block text-xs text-gray-500">
-                    {id}
+                        {id}
                     </span>
                 </h1>
                 <button
@@ -120,7 +125,7 @@ export default function Inbox() {
                             </div>
                         )
                     }) : <p>Loading...</p>}
-                    <div ref={messagesEndRef}></div> 
+                    <div ref={messagesEndRef}></div>
                 </div>
             </div>
             <div className="p-4 bg-white border-t">
@@ -134,6 +139,7 @@ export default function Inbox() {
                         </button>
                     </div>
                     <textarea
+                        ref={inputRef}
                         type="text"
                         className="flex-grow p-2 rounded-full bg-[#f0f2f5] focus:outline-none focus:rounded-md resize-none overflow-hidden h-[40px] max-h-[100px]"
                         placeholder="Aa"
