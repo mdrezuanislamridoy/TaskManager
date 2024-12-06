@@ -55,7 +55,7 @@ const TodoPage = () => {
                 message && <PopUpMessage message={message} setMessage={setMessage}></PopUpMessage>
             }
             {
-                isFormShown && <div className="fixed inset-0 bottom-0 z-40 flex items-end w-full p-6 rounded shadow-md bg-slate-900/40" >
+                isFormShown && <div className="fixed inset-0 bottom-0 z-50 flex items-end w-full p-6 rounded shadow-md bg-slate-900/40" >
                     <div className="fixed inset-0 bg-slate-900/10 " onClick={() => { setIsFormShown(false) }}></div>
                     <TodoForm setIsFormShown={setIsFormShown} setMessage={setMessage} />
                 </div>

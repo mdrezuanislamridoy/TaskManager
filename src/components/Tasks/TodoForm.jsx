@@ -40,10 +40,10 @@ const TodoForm = ({ setIsFormShown,  setMessage }) => {
     return (
 
         <form onSubmit={handleAddTask}
-            className="w-full bg-white shadow-md z-10  p-8 rounded-2xl">
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><NotePencil /> Create new task</h2>
+            className="z-10 w-full md:w-[420px] p-8 bg-white shadow-md rounded-2xl">
+            <h2 className="flex items-center gap-2 mb-4 text-2xl font-bold"><NotePencil /> Create new task</h2>
             <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Title</label>
+                <label className="block mb-2 font-bold text-gray-700">Title</label>
                 <input
                     type="text"
                     value={title}
@@ -55,17 +55,17 @@ const TodoForm = ({ setIsFormShown,  setMessage }) => {
                 />
             </div>
             <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Description</label>
+                <label className="block mb-2 font-bold text-gray-700">Description</label>
                 <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    className="w-full px-3 py-2 border border-gray-300 rounded md:h-[220px]"
                     placeholder="Enter task description"
                     required
                 />
             </div>
             <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Task Date</label>
+                <label className="block mb-2 font-bold text-gray-700">Task Date</label>
                 <input
                     type="date"
                     value={date}
@@ -77,7 +77,7 @@ const TodoForm = ({ setIsFormShown,  setMessage }) => {
             </div>
             <button
                 type="submit"
-                className="w-full bg-slate-500 text-white font-bold py-2 px-4 rounded hover:bg-slate-600"
+                className="w-full px-4 py-2 font-bold text-white rounded bg-slate-500 hover:bg-slate-600"
             >
                 Add Task
             </button>

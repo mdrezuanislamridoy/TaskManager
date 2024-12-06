@@ -20,7 +20,7 @@ export const SideNav = ({ userData, className }) => {
 
     const [activePath, setActivePath] = useState(window.location.pathname)
 
-    return <div className={"flex flex-col w-[70%] max-w-xs bg-white shadow-2xl md:shadow-lg h-full  p-6 z-[9999] transform transition-transform duration-300 ease-in-out " + className}>
+    return <div className={"flex flex-col w-[70%] max-w-xs bg-white shadow-2xl md:shadow-lg h-full  p-6 z-[9999] md:z-30 transform transition-transform duration-300 ease-in-out " + className}>
         <Link to='/social' onClick={() => sidePanelController(false)}>
             <div className="flex flex-col items-center pb-6 mb-6 border-b border-gray-200 ">
                 <Avater url='https://avatars.githubusercontent.com/u/106436211?v=4' className='mb-4 ' > </Avater>
