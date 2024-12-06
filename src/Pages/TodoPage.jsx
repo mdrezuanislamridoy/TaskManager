@@ -13,7 +13,7 @@ import TodoForm from "../components/Tasks/TodoForm";
 const NoTaskFound = () => {
     return (
         <div className="flex flex-col items-center justify-center flex-1 bg-red-800">
-            <h2 className="text-2xl font-bold mb-4">No tasks found</h2>
+            <h2 className="mb-4 text-2xl font-bold">No tasks found</h2>
             <p className="text-gray-600">You have no tasks. Add a task to get started.</p>
         </div>
     );
@@ -30,12 +30,12 @@ const TaskPageHeader = ({ isFormShown , setIsFormShown , setTasks }) => {
         });
     }
     return <div className="flex items-center justify-between text-2xl">
-        <h2 className=" font-light text-gray-800 flex items-center gap-2 py-2 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
+        <h2 className="flex items-center gap-2 py-2 font-light text-gray-800 "> <CheckSquareOffset></CheckSquareOffset> Tasks</h2>
         <div>
-            <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={() => { setIsFormShown(!isFormShown) }} >
+            <button className="p-3 hover:bg-slate-600 hover:text-white " onClick={() => { setIsFormShown(!isFormShown) }} >
                 <Plus />
             </button>
-        <button className="p-3  hover:bg-slate-600 hover:text-white " onClick={sortByIncomplete}>
+        <button className="p-3 hover:bg-slate-600 hover:text-white " onClick={sortByIncomplete}>
                 <SortAscending />
             </button>
         </div>
@@ -50,27 +50,30 @@ const TodoPage = () => {
 
 
     return (
-        <div className=" ">
+        <div className="">
             {
                 message && <PopUpMessage message={message} setMessage={setMessage}></PopUpMessage>
             }
             {
-                isFormShown && <div className="w-full fixed bottom-0  shadow-md rounded p-6 inset-0 bg-slate-900/40 flex items-end z-40" >
-                    <div className="bg-slate-900/10 inset-0 fixed " onClick={() => { setIsFormShown(false) }}></div>
+                isFormShown && <div className="fixed inset-0 bottom-0 z-40 flex items-end w-full p-6 rounded shadow-md bg-slate-900/40" >
+                    <div className="fixed inset-0 bg-slate-900/10 " onClick={() => { setIsFormShown(false) }}></div>
                     <TodoForm setIsFormShown={setIsFormShown} setMessage={setMessage} />
                 </div>
             }
 
-            <div className="w-full bg-white flex-1  rounded p-6 space-y-6">
+            <div className="h-full p-6 space-y-6 rounded">
 
                 <TaskPageHeader isFormShown={isFormShown} setTasks={setTasks} setIsFormShown={setIsFormShown} />
 
                 {tasks.length === 0 && (
                     <NoTaskFound />
                 )}
+                <div className="grid h-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">    
                 {tasks.map((task) => (
+                    
                     <TaskCard key={task._id} task={task} setMessage={setMessage} />
                 ))}
+                </div>
             </div>
         </div>
     )

@@ -93,9 +93,9 @@ export default function App() {
                                         <Route path="/chats/AllMessage" element={<ChatList></ChatList>}></Route>
                                         <Route path="/chats/contacts" element={<FriendPage></FriendPage>} />
                                     </Route>
+                                    <Route path='/message/:id' element={<Inbox></Inbox>}></Route>
 
                                 </Route>
-                                <Route path='/message/:id' element={<Inbox></Inbox>}></Route>
                                 <Route path="/auth" element={!isValidUser ? <Login_Signup></Login_Signup> : <Navigate to="/" />} />
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
