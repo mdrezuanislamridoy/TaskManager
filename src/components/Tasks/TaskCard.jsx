@@ -78,23 +78,23 @@ const TaskCard = ({ task, setMessage }) => {
     };
 
     return (
-        <div key={task._id} className="flex items-cneter gap-4 justify-between rounded-lg border  hover:shadow-lg p-5 pr-2">
+        <div key={task._id} className="flex items-center justify-between gap-4 p-5 pr-2 border rounded-lg hover:shadow-lg">
             <input
                 type="checkbox"
                 onChange={() => handleCheckboxChange(task._id, task.completed)}
                 checked={task.completed}
-                className="w-5 h-5 mt-2 text-blue-600 text-xl"
+                className="w-5 h-5 mt-2 text-xl text-blue-600"
             />
 
             <div className="flex items-center w-full gap-4">
                 <div className="flex-1">
                     {editTaskId === task._id && isEditMode ? (
-                        <div className="space-y-3 p-2 bg-gray-50 rounded-lg">
+                        <div className="p-2 space-y-3 rounded-lg bg-gray-50">
                             <input
                                 type="text"
                                 value={singleTaskTitle}
                                 onChange={(e) => setSingleTaskTitle(e.target.value)}
-                                className="w-full text-lg font-semibold px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                className="w-full px-3 py-2 text-lg font-semibold transition-all border border-gray-200 rounded-md outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 autoFocus
                             />
                             <textarea
@@ -108,11 +108,11 @@ const TaskCard = ({ task, setMessage }) => {
                             <h3 className={`text-lg font-semibold ${task.completed ? "line-through text-gray-400" : "text-gray-800"}`}>
                                 {task.title}
                             </h3>
-                            <div className="flex items-center text-sm text-gray-500 border-b border-gray-100 pb-2">
+                            <div className="flex items-center pb-2 text-sm text-gray-500 border-b border-gray-100">
                                 <Calendar className="w-4 h-4 mr-1" />
                                 {new Date(task.date).toLocaleDateString()}
                             </div>
-                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 hover:line-clamp-none transition-all duration-100 cursor-pointer whitespace-pre-wrap">
+                            <p className="text-sm leading-relaxed text-gray-600 whitespace-pre-wrap transition-all duration-100 cursor-pointer line-clamp-3 hover:line-clamp-none">
                                 {task.description}
                             </p>
                         </div>
@@ -121,16 +121,16 @@ const TaskCard = ({ task, setMessage }) => {
 
                 <div className="flex-shrink-0">
                     {editTaskId === task._id && isEditMode ? (
-                        <div className="flex items-center flex-col">
-                            <button className='p-3 hover:bg-red-100 rounded-lg ' onClick={() => { deleteTodo(task._id); setMessage("Deleting task...") }}>
+                        <div className="flex flex-col items-center">
+                            <button className='p-3 rounded-lg hover:bg-red-100 ' onClick={() => { deleteTodo(task._id); setMessage("Deleting task...") }}>
                                 <Trash size={19} />
                             </button>
-                            <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={() => { editTodo(); setMessage("Updating task...") }}>
+                            <button className='p-3 rounded-lg hover:bg-green-100 ' onClick={() => { editTodo(); setMessage("Updating task...") }}>
                                 <Check size={19} />
                             </button>
                         </div>
                     ) : (
-                        <button className='p-3 hover:bg-green-100 rounded-lg ' onClick={() => toggleEditMode(task._id)}>
+                        <button className='p-3 rounded-lg hover:bg-green-100 ' onClick={() => toggleEditMode(task._id)}>
                             <PencilSimple size={19} />
                         </button>
                     )}
